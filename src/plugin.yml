@@ -1,0 +1,17 @@
+name: MyWarp
+author: ImOlli
+version: 1.0
+main: de.ImOlli.mywarp.MyWarp
+
+commands:
+  warp:
+    description: Teleportiert dich zu einem Warp Punkt.
+  setwarp:
+    description: Erstellt einen Warp Punkt.
+  delwarp:
+    description: Entfernt einen Warp Punkt.
+  warps:
+    description: Zeigt dir alle Warp Punkte an.
+  mywarp:
+    description: Hauptbefehl.
+    
