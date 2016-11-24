@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import de.ImOIli.objects.Warp;
+import de.ImOlli.objects.Warp;
 import de.ImOlli.mywarp.MyWarp;
 
 public class WarpManager {

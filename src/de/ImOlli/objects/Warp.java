@@ -1,4 +1,4 @@
-package de.ImOIli.objects;
+package de.ImOlli.objects;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
