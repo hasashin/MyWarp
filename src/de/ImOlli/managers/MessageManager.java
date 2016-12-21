@@ -33,7 +33,7 @@ public class MessageManager {
         config.options().copyDefaults(true);
         config.options().header("Messages Configuration of MyWarp");
 
-        config.addDefault("MyWarp.prefix", "&eMyWarp &8> ");
+        config.addDefault("MyWarp.prefix", "&eMyWarp &8» ");
         config.addDefault("MyWarp.reload", "&aAlle Konfigurationen wurden neugeladen.");
         config.addDefault("MyWarp.warp.msg", "&7Du wurdest zum Warp Punkt &e%name% &7teleportiert.");
         config.addDefault("MyWarp.noperm.msg", "&cDu hast keine Rechte dazu!");
