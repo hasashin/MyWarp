@@ -15,7 +15,7 @@ public class MessageManager {
 
     public static void init() {
 
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         file = new File("plugins//MyWarp//messages.yml");
 
         if (!file.exists()) {
