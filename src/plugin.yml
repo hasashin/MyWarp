@@ -14,4 +14,3 @@ commands:
     description: Zeigt dir alle Warp Punkte an.
   mywarp:
     description: Hauptbefehl.
-    
