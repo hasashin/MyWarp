@@ -14,6 +14,8 @@ public class MyWarp extends JavaPlugin {
     private static Plugin plugin;
     private static String prefix;
     private static Boolean onlyOp;
+    private static Boolean playSoundOnTeleport;
+    private static Boolean playParticleOnTeleport;
     private static ArrayList<String> warpnames;
 
     @Override
@@ -31,6 +33,9 @@ public class MyWarp extends JavaPlugin {
     @SuppressWarnings("unchecked")
     public static void loadConfig() {
         onlyOp = plugin.getConfig().getBoolean("OnlyOp");
+        playSoundOnTeleport = plugin.getConfig().getBoolean("PlaySoundOnTeleport");
+        playParticleOnTeleport = plugin.getConfig().getBoolean("PlayParticleOnTeleport");
+
         if (plugin.getConfig().contains("warpnames")) {
             warpnames = (ArrayList<String>) plugin.getConfig().getList("warpnames");
         }
@@ -43,6 +48,8 @@ public class MyWarp extends JavaPlugin {
         plugin.saveConfig();
 
         plugin.getConfig().addDefault("OnlyOp", false);
+        plugin.getConfig().addDefault("PlaySoundOnTeleport", true);
+        plugin.getConfig().addDefault("PlayParticleOnTeleport", true);
         plugin.saveConfig();
 
     }
@@ -71,5 +78,13 @@ public class MyWarp extends JavaPlugin {
 
     public static ArrayList<String> getWarpnames() {
         return warpnames;
+    }
+
+    public static Boolean getPlaySoundOnTeleport() {
+        return playSoundOnTeleport;
+    }
+
+    public static Boolean getPlayParticleOnTeleport() {
+        return playParticleOnTeleport;
     }
 }

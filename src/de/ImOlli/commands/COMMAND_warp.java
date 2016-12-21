@@ -4,6 +4,9 @@ import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
+import org.bukkit.Bukkit;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,8 +38,24 @@ public class COMMAND_warp implements CommandExecutor {
                 return true;
             }
 
+            if (MyWarp.getPlayParticleOnTeleport()) {
+                for (Player all : Bukkit.getOnlinePlayers()) {
+                    all.spawnParticle(Particle.PORTAL, p.getLocation(), 100);
+                }
+            }
+
             warp.teleport(p);
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", warpname));
+
+            if (MyWarp.getPlaySoundOnTeleport()) {
+                p.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 20, 20);
+            }
+
+            if (MyWarp.getPlayParticleOnTeleport()) {
+                for (Player all : Bukkit.getOnlinePlayers()) {
+                    all.spawnParticle(Particle.PORTAL, p.getLocation(), 100);
+                }
+            }
             return true;
         } else {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/warp [Name]"));
