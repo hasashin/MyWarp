@@ -4,10 +4,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class Warp {
-	
-	private String name;
+
+	private final String name;
 	private Location location;
-	private String creator;
+	private final String creator;
 	
 	public Warp(String name, Location loc, String creator) {
 		this.name = name;
