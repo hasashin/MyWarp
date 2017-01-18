@@ -29,7 +29,7 @@ public class COMMAND_delwarp implements CommandExecutor {
             String warpname = args[0];
 
             if (!WarpManager.existWarp(warpname)) {
-                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.notexist").replaceAll("%name%", warpname.toUpperCase()));
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.notexist").replaceAll("%name%", warpname));
                 return true;
             }
 
