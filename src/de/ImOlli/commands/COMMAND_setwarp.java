@@ -25,9 +25,9 @@ public class COMMAND_setwarp implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            String warpname = args[0].toLowerCase();
+            String warpname = args[0];
 
-            if (WarpManager.existWarp(warpname)) {
+            if (WarpManager.existWarp(warpname.toLowerCase())) {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.exist").replaceAll("%name%", warpname));
                 return true;
             }

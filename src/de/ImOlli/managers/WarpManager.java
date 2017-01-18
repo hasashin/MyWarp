@@ -48,30 +48,31 @@ public class WarpManager {
         if (MyWarp.getWarpnames() != null && !MyWarp.getWarpnames().isEmpty()) {
             for (String name : MyWarp.getWarpnames()) {
 
-                String creator = config.getString(name + ".creator");
-                String world = config.getString(name + ".world");
-                Double x = config.getDouble(name + ".x");
-                Double y = config.getDouble(name + ".y");
-                Double z = config.getDouble(name + ".z");
+                String creator = config.getString(name.toLowerCase() + ".creator");
+                String warpname = config.getString(name.toLowerCase() + ".name");
+                String world = config.getString(name.toLowerCase() + ".world");
+                Double x = config.getDouble(name.toLowerCase() + ".x");
+                Double y = config.getDouble(name.toLowerCase() + ".y");
+                Double z = config.getDouble(name.toLowerCase() + ".z");
 
-                warps.put(name, new Warp(name, new Location(Bukkit.getWorld(world), x, y, z), creator));
+                warps.put(name.toLowerCase(), new Warp(warpname, new Location(Bukkit.getWorld(world), x, y, z), creator));
             }
         }
 
     }
 
     public static Boolean existWarp(String name) {
-        return (config.contains(name) && warps.containsKey(name));
+        return (config.contains(name.toLowerCase()) && warps.containsKey(name.toLowerCase()));
     }
 
     public static Boolean addWarp(String name, Player creator, Location loc) {
         if (!existWarp(name)) {
-            config.set(name + ".name", name);
-            config.set(name + ".creator", creator.getName());
-            config.set(name + ".world", loc.getWorld().getName());
-            config.set(name + ".x", loc.getX());
-            config.set(name + ".y", loc.getY());
-            config.set(name + ".z", loc.getZ());
+            config.set(name.toLowerCase() + ".name", name);
+            config.set(name.toLowerCase() + ".creator", creator.getName());
+            config.set(name.toLowerCase() + ".world", loc.getWorld().getName());
+            config.set(name.toLowerCase() + ".x", loc.getX());
+            config.set(name.toLowerCase() + ".y", loc.getY());
+            config.set(name.toLowerCase() + ".z", loc.getZ());
 
             Plugin plugin = MyWarp.getPlugin(MyWarp.class);
 
@@ -94,7 +95,7 @@ public class WarpManager {
                 e.printStackTrace();
             }
 
-            warps.put(name, new Warp(name, loc, creator.getName()));
+            warps.put(name.toLowerCase(), new Warp(name, loc, creator.getName()));
             return true;
         }
         return false;

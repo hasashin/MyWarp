@@ -45,7 +45,7 @@ public class COMMAND_warp implements CommandExecutor {
             }
 
             warp.teleport(p);
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", warpname));
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", warp.getName()));
 
             if (MyWarp.getPlaySoundOnTeleport()) {
                 p.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 20, 20);

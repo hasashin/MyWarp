@@ -46,8 +46,6 @@ public class COMMAND_warps implements CommandExecutor {
             }
         }
 
-        System.out.println(warps.toPlainText());
-
         if (warps.toPlainText().equals("")) {
             warps = new TextComponent("§7-");
         }

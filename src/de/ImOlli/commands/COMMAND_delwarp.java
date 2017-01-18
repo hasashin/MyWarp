@@ -3,6 +3,7 @@ package de.ImOlli.commands;
 import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
+import de.ImOlli.objects.Warp;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,15 +26,17 @@ public class COMMAND_delwarp implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            String warpname = args[0].toLowerCase();
+            String warpname = args[0];
 
             if (!WarpManager.existWarp(warpname)) {
-                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.notexist").replaceAll("%name%", warpname));
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.notexist").replaceAll("%name%", warpname.toUpperCase()));
                 return true;
             }
 
-            WarpManager.removeWarp(warpname);
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.remove").replaceAll("%name%", warpname));
+            Warp warp = WarpManager.getWarp(warpname);
+
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.remove").replaceAll("%name%", warp.getName()));
+            WarpManager.removeWarp(warpname.toLowerCase());
             return true;
         } else {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/setwarp [Name]"));
