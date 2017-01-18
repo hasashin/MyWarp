@@ -1,6 +1,6 @@
 name: MyWarp
 author: ImOlli
-version: 1.2
+version: 1.2.1
 main: de.ImOlli.mywarp.MyWarp
 
 commands:
