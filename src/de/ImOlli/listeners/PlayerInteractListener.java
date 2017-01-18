@@ -24,10 +24,6 @@ public class PlayerInteractListener implements Listener {
                         if (!sign.getLine(2).equalsIgnoreCase("") && !sign.getLine(2).equalsIgnoreCase(" ")) {
                             String warpname = sign.getLine(2).toLowerCase();
 
-                            if (warpname.equals("")) {
-                                return;
-                            }
-
                             p.performCommand("warp " + warpname);
                         }
                     }
