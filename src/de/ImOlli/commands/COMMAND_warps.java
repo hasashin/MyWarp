@@ -14,7 +14,7 @@ public class COMMAND_warps implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage("Du bist kein Spieler");
+            cs.sendMessage("You are not an player!");
             return true;
         }
 

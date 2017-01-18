@@ -5,12 +5,12 @@ main: de.ImOlli.mywarp.MyWarp
 
 commands:
   warp:
-    description: Teleportiert dich zu einem Warp Punkt.
+    description: Warps you to an warppoint.
   setwarp:
-    description: Erstellt einen Warp Punkt.
+    description: Creates an warppoint.
   delwarp:
-    description: Entfernt einen Warp Punkt.
+    description: Removes an warpoint.
   warps:
-    description: Zeigt dir alle Warp Punkte an.
+    description: Show you all warppoints.
   mywarp:
-    description: Hauptbefehl.
+    description: Maincommand.

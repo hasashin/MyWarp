@@ -23,7 +23,7 @@ public class MessageManager {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("[MyWarp] Fehler beim erstellen der Datei 'messages.yml'!");
+                System.out.println("[MyWarp] An error occurred while creating 'messages.yml'!");
                 return;
             }
         }
@@ -31,18 +31,18 @@ public class MessageManager {
         config = YamlConfiguration.loadConfiguration(file);
 
         config.options().copyDefaults(true);
-        config.options().header("Messages Configuration of MyWarp");
+        config.options().header("Messages configuration of MyWarp");
 
         config.addDefault("MyWarp.prefix", "&eMyWarp &8» ");
-        config.addDefault("MyWarp.reload", "&aAlle Konfigurationen wurden neugeladen.");
-        config.addDefault("MyWarp.warp.msg", "&7Du wurdest zum Warp Punkt &e%name% &7teleportiert.");
-        config.addDefault("MyWarp.noperm.msg", "&cDu hast keine Rechte dazu!");
-        config.addDefault("MyWarp.warp.notexist", "&cDer Warp Punkt &e%name% &cexistiert nicht!");
-        config.addDefault("MyWarp.warp.exist", "&cDer Warp Punkt &e%name% &cexistiert schon!");
-        config.addDefault("MyWarp.warp.create", "&7Du hast erfolgreich den Warp Punkt &e%name% &7erstellt.");
-        config.addDefault("MyWarp.warp.remove", "&7Du hast erfolgreich den Warp Punkt &e%name% &7entfernt.");
-        config.addDefault("MyWarp.error.msg", "&cEin Fehler ist aufgetreten!");
-        config.addDefault("MyWarp.cmd.error", "&cNutze %cmd%&c!");
+        config.addDefault("MyWarp.reload", "&aReloaded all configurations.");
+        config.addDefault("MyWarp.warp.msg", "&7You were warped to &e%name%.");
+        config.addDefault("MyWarp.noperm.msg", "&cYou don't have enough permissions for that!");
+        config.addDefault("MyWarp.warp.notexist", "&cThe warppoint &e%name% &cdidn't exist!");
+        config.addDefault("MyWarp.warp.exist", "&cThe warppoint &7'&e%name%&7' &calready exist!");
+        config.addDefault("MyWarp.warp.create", "&7You successfully created the warppoint &e%name%&7.");
+        config.addDefault("MyWarp.warp.remove", "&7You successfully removed the warppoint &e%name%&7.");
+        config.addDefault("MyWarp.error.msg", "&cAn error occurred!");
+        config.addDefault("MyWarp.cmd.error", "&cUse %cmd%&c!");
 
         try {
             config.save(file);
