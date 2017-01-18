@@ -36,7 +36,7 @@ public class COMMAND_delwarp implements CommandExecutor {
             Warp warp = WarpManager.getWarp(warpname.toLowerCase());
 
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.remove").replaceAll("%name%", warp.getName()));
-            WarpManager.removeWarp(warpname.toLowerCase());
+            WarpManager.removeWarp(warp.getName());
             return true;
         } else {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/setwarp [Name]"));

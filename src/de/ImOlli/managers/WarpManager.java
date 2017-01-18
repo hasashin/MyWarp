@@ -102,8 +102,8 @@ public class WarpManager {
     }
 
     public static Boolean removeWarp(String name) {
-        if (existWarp(name)) {
-            config.set(name, null);
+        if (existWarp(name.toLowerCase())) {
+            config.set(name.toLowerCase(), null);
 
             Plugin plugin = MyWarp.getPlugin(MyWarp.class);
 
@@ -124,7 +124,7 @@ public class WarpManager {
                 e.printStackTrace();
             }
 
-            warps.remove(name);
+            warps.remove(name.toLowerCase());
             return true;
         }
         return false;
