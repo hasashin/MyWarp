@@ -29,7 +29,7 @@ public class COMMAND_warp implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            String warpname = args[0];
+            String warpname = args[0].toLowerCase();
 
             Warp warp = WarpManager.getWarp(warpname);
 
