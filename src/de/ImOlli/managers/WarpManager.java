@@ -37,7 +37,8 @@ public class WarpManager {
         config = YamlConfiguration.loadConfiguration(file);
 
         config.options().copyDefaults(true);
-        config.options().header("Warps of MyWarp");
+        config.options().header("Warps of MyWarp \n\n" +
+                "Please note that you can only edit the config when the server is off.");
 
         try {
             config.save(file);

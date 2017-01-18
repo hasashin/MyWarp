@@ -31,7 +31,8 @@ public class MessageManager {
         config = YamlConfiguration.loadConfiguration(file);
 
         config.options().copyDefaults(true);
-        config.options().header("Messages configuration of MyWarp");
+        config.options().header("Messages configuration of MyWarp \n\n" +
+                "Please note that you can only edit the config when the server is off.");
 
         config.addDefault("MyWarp.prefix", "&eMyWarp &8» ");
         config.addDefault("MyWarp.reload", "&aReloaded all configurations.");

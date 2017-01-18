@@ -1,6 +1,8 @@
 package de.ImOlli.mywarp;
 
 import de.ImOlli.commands.*;
+import de.ImOlli.listeners.PlayerInteractListener;
+import de.ImOlli.listeners.SignChangeListener;
 import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
 import org.bukkit.Bukkit;
@@ -16,6 +18,7 @@ public class MyWarp extends JavaPlugin {
     private static Boolean onlyOp;
     private static Boolean playSoundOnTeleport;
     private static Boolean playParticleOnTeleport;
+    private static Boolean warpSigns;
     private static ArrayList<String> warpnames;
 
     @Override
@@ -28,6 +31,7 @@ public class MyWarp extends JavaPlugin {
         MessageManager.loadConfig();
         WarpManager.init();
         registerCommands();
+        registerListeners();
     }
 
     @SuppressWarnings("unchecked")
@@ -35,6 +39,7 @@ public class MyWarp extends JavaPlugin {
         onlyOp = plugin.getConfig().getBoolean("OnlyOp");
         playSoundOnTeleport = plugin.getConfig().getBoolean("PlaySoundOnTeleport");
         playParticleOnTeleport = plugin.getConfig().getBoolean("PlayParticleOnTeleport");
+        warpSigns = plugin.getConfig().getBoolean("WarpSigns");
 
         if (plugin.getConfig().contains("warpnames")) {
             warpnames = (ArrayList<String>) plugin.getConfig().getList("warpnames");
@@ -44,12 +49,14 @@ public class MyWarp extends JavaPlugin {
     public static void checkConfig() {
 
         plugin.getConfig().options().copyDefaults(true);
-        plugin.getConfig().options().header("Configuration of MyWarp");
+        plugin.getConfig().options().header("Configuration of MyWarp \n\n" +
+                "Please note that you can only edit the config when the server is off.");
         plugin.saveConfig();
 
         plugin.getConfig().addDefault("OnlyOp", false);
         plugin.getConfig().addDefault("PlaySoundOnTeleport", true);
         plugin.getConfig().addDefault("PlayParticleOnTeleport", true);
+        plugin.getConfig().addDefault("WarpSigns", true);
         plugin.saveConfig();
 
     }
@@ -61,6 +68,13 @@ public class MyWarp extends JavaPlugin {
         Bukkit.getPluginCommand("warps").setExecutor(new COMMAND_warps());
         Bukkit.getPluginCommand("delwarp").setExecutor(new COMMAND_delwarp());
         Bukkit.getPluginCommand("mywarp").setExecutor(new COMMAND_mywarp());
+
+    }
+
+    private void registerListeners() {
+
+        Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SignChangeListener(), this);
 
     }
 
@@ -86,5 +100,9 @@ public class MyWarp extends JavaPlugin {
 
     public static Boolean getPlayParticleOnTeleport() {
         return playParticleOnTeleport;
+    }
+
+    public static Boolean getWarpSigns() {
+        return warpSigns;
     }
 }
