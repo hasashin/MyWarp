@@ -1,5 +1,5 @@
 # MyWarp
-Ein Simples Plugin zum erstellen von Warp Punkten.
+An simple warp plugin to create warppoints
 
 ##ToDo
 - [ ] Add MySQL Connection
