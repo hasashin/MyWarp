@@ -4,6 +4,10 @@ import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,18 +29,33 @@ public class COMMAND_warps implements CommandExecutor {
             return true;
         }
 
-        String warps = null;
+        TextComponent warps = new TextComponent("");
         for (Warp warp : WarpManager.getWarps().values()) {
-            if (warps == null) {
-                warps = warp.getName();
+
+            TextComponent warpComponent = new TextComponent("§7" + warp.getName());
+            warpComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warp " + warp.getName()));
+            warpComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Warp to §e" + warp.getName()).create()));
+
+            if (warps.toPlainText().equals("")) {
+                warps.addExtra(warpComponent);
             } else {
-                warps = warps + ", " + warp.getName();
+                TextComponent seperator = new TextComponent("§7, ");
+
+                warps.addExtra(seperator);
+                warps.addExtra(warpComponent);
             }
         }
-        if (warps == null) {
-            warps = "-";
+
+        System.out.println(warps.toPlainText());
+
+        if (warps.toPlainText().equals("")) {
+            warps = new TextComponent("§7-");
         }
-        p.sendMessage(MyWarp.getPrefix() + "§7" + warps);
+
+        TextComponent msg = new TextComponent(MyWarp.getPrefix() + "§7");
+        msg.addExtra(warps);
+
+        p.spigot().sendMessage(msg);
 
         return true;
     }
