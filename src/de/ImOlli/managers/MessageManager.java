@@ -36,10 +36,10 @@ public class MessageManager {
 
         config.addDefault("MyWarp.prefix", "&eMyWarp &8» ");
         config.addDefault("MyWarp.reload", "&aReloaded all configurations.");
-        config.addDefault("MyWarp.warp.msg", "&7You were warped to &e%name%.");
+        config.addDefault("MyWarp.warp.msg", "&7You were warped to &e%name%§7.");
         config.addDefault("MyWarp.noperm.msg", "&cYou don't have enough permissions for that!");
         config.addDefault("MyWarp.warp.notexist", "&cThe warppoint &e%name% &cdidn't exist!");
-        config.addDefault("MyWarp.warp.exist", "&cThe warppoint &7'&e%name%&7' &calready exist!");
+        config.addDefault("MyWarp.warp.exist", "&cThe warppoint &e%name% &calready exist!");
         config.addDefault("MyWarp.warp.create", "&7You successfully created the warppoint &e%name%&7.");
         config.addDefault("MyWarp.warp.remove", "&7You successfully removed the warppoint &e%name%&7.");
         config.addDefault("MyWarp.error.msg", "&cAn error occurred!");
