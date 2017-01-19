@@ -14,3 +14,5 @@ commands:
     description: Show you all warppoints.
   mywarp:
     description: Maincommand.
+  warpgui:
+    description: Opens an WarpGUI.

@@ -4,6 +4,7 @@ import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
+import de.ImOlli.objects.WarpGui;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -58,7 +59,7 @@ public class COMMAND_warp implements CommandExecutor {
             }
             return true;
         } else {
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/warp [Name]"));
+            WarpGui.openWarpTeleportGui(p, 1);
             return true;
         }
     }

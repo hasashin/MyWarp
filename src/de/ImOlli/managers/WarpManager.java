@@ -138,4 +138,15 @@ public class WarpManager {
     public static HashMap<String, Warp> getWarps() {
         return warps;
     }
+
+    public static ArrayList<Warp> getWarpList() {
+
+        ArrayList<Warp> warplist = new ArrayList<>();
+
+        for (Warp warp : getWarps().values()) {
+            warplist.add(warp);
+        }
+
+        return warplist;
+    }
 }

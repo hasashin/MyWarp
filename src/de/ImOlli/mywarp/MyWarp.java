@@ -6,6 +6,7 @@ import de.ImOlli.listeners.PlayerTabCompleteListener;
 import de.ImOlli.listeners.SignChangeListener;
 import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
+import de.ImOlli.objects.WarpGui;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -68,6 +69,7 @@ public class MyWarp extends JavaPlugin {
         Bukkit.getPluginCommand("warps").setExecutor(new COMMAND_warps());
         Bukkit.getPluginCommand("delwarp").setExecutor(new COMMAND_delwarp());
         Bukkit.getPluginCommand("mywarp").setExecutor(new COMMAND_mywarp());
+        Bukkit.getPluginCommand("warpgui").setExecutor(new COMMAND_warpgui());
 
     }
 
@@ -76,6 +78,7 @@ public class MyWarp extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerTabCompleteListener(), this);
+        Bukkit.getPluginManager().registerEvents(new WarpGui(), this);
 
     }
 

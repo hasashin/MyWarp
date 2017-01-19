@@ -4,6 +4,7 @@ import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
+import de.ImOlli.objects.WarpGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,7 +40,7 @@ public class COMMAND_delwarp implements CommandExecutor {
             WarpManager.removeWarp(warp.getName());
             return true;
         } else {
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/setwarp [Name]"));
+            WarpGui.openWarpDeleteGui(p, 1);
             return true;
         }
     }
