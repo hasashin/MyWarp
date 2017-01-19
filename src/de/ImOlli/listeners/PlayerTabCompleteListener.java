@@ -14,8 +14,6 @@ public class PlayerTabCompleteListener implements Listener {
     @EventHandler
     public void onTabComplete(TabCompleteEvent e) {
 
-        System.out.println(e.getBuffer());
-
         String buffer = e.getBuffer();
 
         if (buffer.equalsIgnoreCase("/mywarp ")) {
