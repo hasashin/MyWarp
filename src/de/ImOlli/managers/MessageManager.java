@@ -37,6 +37,7 @@ public class MessageManager {
         config.addDefault("MyWarp.prefix", "&eMyWarp &8» ");
         config.addDefault("MyWarp.reload", "&aReloaded all configurations.");
         config.addDefault("MyWarp.warp.msg", "&7You were warped to &e%name%§7.");
+        config.addDefault("MyWarp.warps.msg", "&7List of all Warps (&e%warps%&7)");
         config.addDefault("MyWarp.noperm.msg", "&cYou don't have enough permissions for that!");
         config.addDefault("MyWarp.warp.notexist", "&cThe warppoint &e%name% &cdidn't exists!");
         config.addDefault("MyWarp.warp.exist", "&cThe warppoint &e%name% &calready exist!");
@@ -64,6 +65,7 @@ public class MessageManager {
         String prefix = config.getString("MyWarp.prefix");
         String reload = config.getString("MyWarp.reload");
         String warp = config.getString("MyWarp.warp.msg");
+        String warps = config.getString("MyWarp.warps.msg");
         String noperm = config.getString("MyWarp.noperm.msg");
         String notexist = config.getString("MyWarp.warp.notexist");
         String exist = config.getString("MyWarp.warp.exist");
@@ -82,6 +84,7 @@ public class MessageManager {
         prefix = prefix.replaceAll("&", "§");
         reload = reload.replaceAll("&", "§");
         warp = warp.replaceAll("&", "§");
+        warps = warps.replaceAll("&", "§");
         noperm = noperm.replaceAll("&", "§");
         notexist = notexist.replaceAll("&", "§");
         exist = exist.replaceAll("&", "§");
@@ -100,6 +103,7 @@ public class MessageManager {
         messages.put("MyWarp.prefix", prefix);
         messages.put("MyWarp.reload", reload);
         messages.put("MyWarp.warp.msg", warp);
+        messages.put("MyWarp.warps.msg", warps);
         messages.put("MyWarp.noperm.msg", noperm);
         messages.put("MyWarp.warp.notexist", notexist);
         messages.put("MyWarp.warp.exist", exist);

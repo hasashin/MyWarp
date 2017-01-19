@@ -57,7 +57,7 @@ public class COMMAND_warps implements CommandExecutor {
         TextComponent msg = new TextComponent(MyWarp.getPrefix() + "§7");
         msg.addExtra(warps);
 
-        p.sendMessage(MyWarp.getPrefix() + "§7List of all Warps (§e" + WarpManager.getWarps().size() + "§7)");
+        p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warps.msg").replace("%warps%", "" + WarpManager.getWarps().size()));
         p.spigot().sendMessage(msg);
 
         return true;
