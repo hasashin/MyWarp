@@ -16,15 +16,15 @@ public class PlayerTabCompleteListener implements Listener {
 
         System.out.println(e.getBuffer());
 
-        String buffer = e.getBuffer().trim();
+        String buffer = e.getBuffer();
 
-        if (buffer.equalsIgnoreCase("/mywarp")) {
+        if (buffer.equalsIgnoreCase("/mywarp ")) {
 
             List<String> completions = new ArrayList<>();
             completions.add("reload");
             e.setCompletions(completions);
 
-        } else if (buffer.equalsIgnoreCase("/warp")) {
+        } else if (buffer.equalsIgnoreCase("/warp ")) {
 
             List<String> completions = new ArrayList<>();
             for (Warp warp : WarpManager.getWarps().values()) {
@@ -32,7 +32,7 @@ public class PlayerTabCompleteListener implements Listener {
             }
             e.setCompletions(completions);
 
-        } else if (buffer.equalsIgnoreCase("/delwarp")) {
+        } else if (buffer.equalsIgnoreCase("/delwarp ")) {
 
             List<String> completions = new ArrayList<>();
             for (Warp warp : WarpManager.getWarps().values()) {
@@ -40,11 +40,11 @@ public class PlayerTabCompleteListener implements Listener {
             }
             e.setCompletions(completions);
 
-        } else if (buffer.equalsIgnoreCase("/warps")) {
+        } else if (buffer.equalsIgnoreCase("/warps ")) {
 
             e.setCancelled(true);
 
-        } else if (buffer.equalsIgnoreCase("/setwarp")) {
+        } else if (buffer.equalsIgnoreCase("/setwarp ")) {
 
             e.setCancelled(true);
 
