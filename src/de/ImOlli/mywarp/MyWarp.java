@@ -2,6 +2,7 @@ package de.ImOlli.mywarp;
 
 import de.ImOlli.commands.*;
 import de.ImOlli.listeners.PlayerInteractListener;
+import de.ImOlli.listeners.PlayerTabCompleteListener;
 import de.ImOlli.listeners.SignChangeListener;
 import de.ImOlli.managers.MessageManager;
 import de.ImOlli.managers.WarpManager;
@@ -74,6 +75,7 @@ public class MyWarp extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignChangeListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerTabCompleteListener(), this);
 
     }
 
