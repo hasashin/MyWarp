@@ -24,6 +24,10 @@ public class COMMAND_mywarp implements CommandExecutor {
             return true;
         }
 
+        if (!p.hasPermission("MyWarp.mywarp")) {
+            return false;
+        }
+
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 MyWarp.checkConfig();

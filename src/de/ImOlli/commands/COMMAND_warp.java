@@ -29,6 +29,10 @@ public class COMMAND_warp implements CommandExecutor {
             return true;
         }
 
+        if (!p.hasPermission("MyWarp.warp.warp")) {
+            return false;
+        }
+
         if (args.length == 1) {
             String warpname = args[0];
 

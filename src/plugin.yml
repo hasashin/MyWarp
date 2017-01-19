@@ -1,18 +1,56 @@
 name: MyWarp
 author: ImOlli
-version: 1.2.1
+version: 1.4
+description: This Plugin give you the ability to create warppoints
 main: de.ImOlli.mywarp.MyWarp
 
 commands:
   warp:
     description: Warps you to an warppoint.
+    usage: /warp [Name]
+    permission: MyWarp.warp.warp
   setwarp:
     description: Creates an warppoint.
+    usage: /setwarp <Name>
+    permission: MyWarp.warp.create
   delwarp:
     description: Removes an warpoint.
+    usage: /delwarp <Name>
+    permission: MyWarp.warp.delete
   warps:
     description: Show you all warppoints.
+    usage: /warps
+    permission: MyWarp.warps
   mywarp:
     description: Maincommand.
+    usage: /mywarp <reload>
+    permission: MyWarp.mywarp
   warpgui:
     description: Opens an WarpGUI.
+    usage: /warpgui
+    permission: MyWarp.warp.warp
+
+permissions:
+  MyWarp.*:
+    description: Gives you all permissions.
+    children:
+      MyWarp.warp.warp: true
+      MyWarp.warp.create: true
+      MyWarp.warp.delete: true
+      MyWarp.warps: true
+      MyWarp.mywarp: true
+  MyWarp.warp.warp:
+    description: Gives you the permission to warp to warppoints.
+    default: true
+  MyWarp.warp.create:
+    description: Gives you the permission to create warppoints.
+    default: op
+  MyWarp.warp.delete:
+    description: Gives you the permission to delete warppoints.
+    default: op
+  MyWarp.warps:
+    description: Gives you the permission to show all list of all warppoints.
+    default: true
+  MyWarp.mywarp:
+    description: Gives you the permission to reload MyWarp.
+    default: op

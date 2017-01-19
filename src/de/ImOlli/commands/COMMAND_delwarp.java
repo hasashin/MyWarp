@@ -26,6 +26,10 @@ public class COMMAND_delwarp implements CommandExecutor {
             return true;
         }
 
+        if (!p.hasPermission("MyWarp.warp.delete")) {
+            return false;
+        }
+
         if (args.length == 1) {
             String warpname = args[0];
 

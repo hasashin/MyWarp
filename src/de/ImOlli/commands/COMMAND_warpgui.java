@@ -25,6 +25,10 @@ public class COMMAND_warpgui implements CommandExecutor {
             return true;
         }
 
+        if (!p.hasPermission("MyWarp.warp.warp")) {
+            return false;
+        }
+
         WarpGui.openWarpTeleportGui(p, 1);
 
         return true;

@@ -29,6 +29,10 @@ public class COMMAND_warps implements CommandExecutor {
             return true;
         }
 
+        if (!p.hasPermission("MyWarp.warps")) {
+            return false;
+        }
+
         TextComponent warps = new TextComponent("");
         for (Warp warp : WarpManager.getWarps().values()) {
 
