@@ -14,7 +14,7 @@ public class COMMAND_warpgui implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String args, String[] label) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage("You are not a player!");
+            cs.sendMessage(MessageManager.getMessage("MyWarp.console.notplayer"));
             return true;
         }
 

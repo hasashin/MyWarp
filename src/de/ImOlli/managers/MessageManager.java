@@ -35,6 +35,7 @@ public class MessageManager {
                 "Please note that you can only edit the config when the server is off.");
 
         config.addDefault("MyWarp.prefix", "&aMyWarp &8» ");
+        config.addDefault("MyWarp.console.notplayer", "You are not an player!");
         config.addDefault("MyWarp.reload", "&aReloaded all configurations.");
         config.addDefault("MyWarp.warp.msg", "&7You were warped to &e%name%§7.");
         config.addDefault("MyWarp.warps.msg", "&7List of all Warps (&e%warps%&7)");
@@ -63,6 +64,7 @@ public class MessageManager {
     public static void loadConfig() {
 
         String prefix = config.getString("MyWarp.prefix");
+        String console = config.getString("MyWarp.console.notplayer");
         String reload = config.getString("MyWarp.reload");
         String warp = config.getString("MyWarp.warp.msg");
         String warps = config.getString("MyWarp.warps.msg");
@@ -101,6 +103,7 @@ public class MessageManager {
         cmderror = cmderror.replaceAll("&", "§");
 
         messages.put("MyWarp.prefix", prefix);
+        messages.put("MyWarp.console.notplayer", console);
         messages.put("MyWarp.reload", reload);
         messages.put("MyWarp.warp.msg", warp);
         messages.put("MyWarp.warps.msg", warps);

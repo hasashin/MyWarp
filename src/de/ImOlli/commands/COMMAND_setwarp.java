@@ -13,7 +13,7 @@ public class COMMAND_setwarp implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (!(cs instanceof Player)) {
-            cs.sendMessage("You are not an player!");
+            cs.sendMessage(MessageManager.getMessage("MyWarp.console.notplayer"));
             return true;
         }
 
