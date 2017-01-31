@@ -34,7 +34,7 @@ public class MessageManager {
         config.options().header("Messages configuration of MyWarp \n\n" +
                 "Please note that you can only edit the config when the server is off.");
 
-        config.addDefault("MyWarp.prefix", "&eMyWarp &8» ");
+        config.addDefault("MyWarp.prefix", "&aMyWarp &8» ");
         config.addDefault("MyWarp.reload", "&aReloaded all configurations.");
         config.addDefault("MyWarp.warp.msg", "&7You were warped to &e%name%§7.");
         config.addDefault("MyWarp.warps.msg", "&7List of all Warps (&e%warps%&7)");
@@ -43,8 +43,8 @@ public class MessageManager {
         config.addDefault("MyWarp.warp.exist", "&cThe warppoint &e%name% &calready exist!");
         config.addDefault("MyWarp.warp.create", "&7You successfully created the warppoint &e%name%&7.");
         config.addDefault("MyWarp.warp.remove", "&7You successfully removed the warppoint &e%name%&7.");
-        config.addDefault("MyWarp.warp.gui.title.warp", "&eWarpGUI §5Teleport");
-        config.addDefault("MyWarp.warp.gui.title.delete", "&eWarpGUI §cDelete");
+        config.addDefault("MyWarp.warp.gui.title.warp", "&e&lWarpGUI &8| §5Teleport");
+        config.addDefault("MyWarp.warp.gui.title.delete", "&e&lWarpGUI &8| §cDelete");
         config.addDefault("MyWarp.warp.gui.nextpage", "&eNext Page");
         config.addDefault("MyWarp.warp.gui.previouspage", "&ePrevious Page");
         config.addDefault("MyWarp.warp.gui.nowarps", "&cSorry, but no warps exist.");
