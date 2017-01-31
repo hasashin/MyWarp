@@ -1,7 +1,7 @@
 name: MyWarp
 author: ImOlli
 version: 1.4
-description: This Plugin give you the ability to create warppoints
+description: This Plugin give you the ability to create warppoints.
 main: de.ImOlli.mywarp.MyWarp
 
 commands:
@@ -10,15 +10,15 @@ commands:
     usage: /warp [Name]
     permission: MyWarp.warp.warp
   setwarp:
-    description: Creates an warppoint.
-    usage: /setwarp <Name>
+    description: Creates an new warppoint.
+    usage: /setwarp [Name]
     permission: MyWarp.warp.create
   delwarp:
-    description: Removes an warpoint.
-    usage: /delwarp <Name>
+    description: Removes an warppoint.
+    usage: /delwarp [Name]
     permission: MyWarp.warp.delete
   warps:
-    description: Show you all warppoints.
+    description: Show you all available warppoints.
     usage: /warps
     permission: MyWarp.warps
   mywarp:
@@ -26,7 +26,7 @@ commands:
     usage: /mywarp <reload>
     permission: MyWarp.mywarp
   warpgui:
-    description: Opens an WarpGUI.
+    description: Opens an Teleport WarpGUI.
     usage: /warpgui
     permission: MyWarp.warp.warp
 
