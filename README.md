@@ -29,16 +29,16 @@ An simple warp plugin to create warppoints
 	-    /warps | MyWarp.warps
 	-    /warpgui | MyWarp.warp.warp
 
-  ###Default Permissions:
+##Default Permissions:
     -   MyWarp.warp.warp
     -   MyWarp.warps
 
-  ###Op Permissions:
+##Op Permissions:
   	-   MyWarp.warp.create
   	-   MyWarp.warp.remove
   	-   MyWarp.mywarp
 
-  ###Ultimate Permission:
+##Ultimate Permission:
   	-   MyWarp.*
 
 ##ToDo
