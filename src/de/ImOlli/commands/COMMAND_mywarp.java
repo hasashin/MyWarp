@@ -38,7 +38,7 @@ public class COMMAND_mywarp implements CommandExecutor {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.reload"));
                 return true;
             } else {
-                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmderror.msg").replaceAll("%cmd%", "/Mywarp [reload]"));
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/Mywarp [reload]"));
                 return true;
             }
         } else {
