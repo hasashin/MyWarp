@@ -32,7 +32,7 @@ public class MessageManager {
 
         config.options().copyDefaults(true);
         config.options().header("Messages configuration of MyWarp \n\n" +
-                "Please note that you can only edit the config when the server is off.");
+                "Please note that editing the configurations while the server is running is not recommended.");
 
         config.addDefault("MyWarp.prefix", "&aMyWarp &8» ");
         config.addDefault("MyWarp.console.notplayer", "You are not an player!");
@@ -44,6 +44,8 @@ public class MessageManager {
         config.addDefault("MyWarp.warp.exist", "&cThe warppoint &e%name% &calready exist!");
         config.addDefault("MyWarp.warp.create", "&7You successfully created the warppoint &e%name%&7.");
         config.addDefault("MyWarp.warp.remove", "&7You successfully removed the warppoint &e%name%&7.");
+        config.addDefault("MyWarp.warp.sign.success", "&7You successfully created an warpsign §7to &e%name%&7.");
+        config.addDefault("MyWarp.warp.sign.empty", "&cPlease write an warpname in the second line!");
         config.addDefault("MyWarp.warp.gui.title.warp", "&e&lWarpGUI &8| §5Teleport");
         config.addDefault("MyWarp.warp.gui.title.delete", "&e&lWarpGUI &8| §cDelete");
         config.addDefault("MyWarp.warp.gui.nextpage", "&eNext Page");
@@ -73,6 +75,8 @@ public class MessageManager {
         String exist = config.getString("MyWarp.warp.exist");
         String create = config.getString("MyWarp.warp.create");
         String remove = config.getString("MyWarp.warp.remove");
+        String warpsignsuccess = config.getString("MyWarp.warp.sign.success");
+        String warpsignempty = config.getString("MyWarp.warp.sign.empty");
         String guititlewarp = config.getString("MyWarp.warp.gui.title.warp");
         String guititledelete = config.getString("MyWarp.warp.gui.title.delete");
         String guinextpage = config.getString("MyWarp.warp.gui.nextpage");
@@ -92,6 +96,8 @@ public class MessageManager {
         exist = exist.replaceAll("&", "§");
         create = create.replaceAll("&", "§");
         remove = remove.replaceAll("&", "§");
+        warpsignsuccess = warpsignsuccess.replaceAll("&", "§");
+        warpsignempty = warpsignempty.replaceAll("&", "§");
         guititlewarp = guititlewarp.replaceAll("&", "§");
         guititledelete = guititledelete.replaceAll("&", "§");
         guinextpage = guinextpage.replaceAll("&", "§");
@@ -112,6 +118,8 @@ public class MessageManager {
         messages.put("MyWarp.warp.exist", exist);
         messages.put("MyWarp.warp.create", create);
         messages.put("MyWarp.warp.remove", remove);
+        messages.put("MyWarp.warp.sign.success", warpsignsuccess);
+        messages.put("MyWarp.warp.sign.empty", warpsignempty);
         messages.put("MyWarp.warp.gui.title.warp", guititlewarp);
         messages.put("MyWarp.warp.gui.title.delete", guititledelete);
         messages.put("MyWarp.warp.gui.nextpage", guinextpage);

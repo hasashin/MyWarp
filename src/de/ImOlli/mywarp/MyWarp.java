@@ -52,7 +52,7 @@ public class MyWarp extends JavaPlugin {
 
         plugin.getConfig().options().copyDefaults(true);
         plugin.getConfig().options().header("Configuration of MyWarp \n\n" +
-                "Please note that you can only edit the config when the server is off.");
+                "Please note that editing the configurations while the server is running is not recommended.");
 
         plugin.getConfig().addDefault("OnlyOp", false);
         plugin.getConfig().addDefault("PlaySoundOnTeleport", true);
