@@ -1,7 +1,6 @@
 package de.ImOlli.commands;
 
 import de.ImOlli.managers.MessageManager;
-import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,11 +29,7 @@ public class COMMAND_mywarp implements CommandExecutor {
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
-                MyWarp.checkConfig();
-                MyWarp.loadConfig();
-                MessageManager.init();
-                MessageManager.loadConfig();
-                WarpManager.init();
+                MyWarp.reload();
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.reload"));
                 return true;
             } else {

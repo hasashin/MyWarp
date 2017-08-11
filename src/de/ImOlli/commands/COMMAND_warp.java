@@ -1,13 +1,12 @@
 package de.ImOlli.commands;
 
 import de.ImOlli.managers.MessageManager;
+import de.ImOlli.managers.PlayerManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
+import de.ImOlli.objects.WarpDelay;
 import de.ImOlli.objects.WarpGui;
-import org.bukkit.Bukkit;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,23 +42,34 @@ public class COMMAND_warp implements CommandExecutor {
                 return true;
             }
 
-            if (MyWarp.getPlayParticleOnTeleport()) {
-                for (Player all : Bukkit.getOnlinePlayers()) {
-                    all.spawnParticle(Particle.PORTAL, p.getLocation(), 100);
+            if (MyWarp.isDelayEnabled()) {
+                if (PlayerManager.isCurrentlyWarping(p)) {
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.currentlywarping"));
+                    return true;
                 }
             }
 
-            warp.teleport(p);
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", warp.getName()));
+            if (MyWarp.isCooldownEnabled()) {
+                if (PlayerManager.getCooldown(p) > 0) {
 
-            if (MyWarp.getPlaySoundOnTeleport()) {
-                p.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 20, 20);
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.cooldown").replaceAll("%time%", PlayerManager.getCooldown(p).toString()));
+                    return true;
+
+                } else {
+
+                    PlayerManager.addCooldown(p);
+                }
             }
 
-            if (MyWarp.getPlayParticleOnTeleport()) {
-                for (Player all : Bukkit.getOnlinePlayers()) {
-                    all.spawnParticle(Particle.PORTAL, p.getLocation(), 100);
-                }
+            if (MyWarp.isDelayEnabled()) {
+
+                WarpDelay warpDelay = new WarpDelay(p, warp);
+                warpDelay.start();
+
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.beforedelayedwarping").replaceAll("%time%", MyWarp.getTeleportDelay().toString()));
+
+            } else {
+                warp.teleport(p);
             }
             return true;
         } else {

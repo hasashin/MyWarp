@@ -1,17 +1,18 @@
 package de.ImOlli.mywarp;
 
 import de.ImOlli.commands.*;
-import de.ImOlli.listeners.PlayerInteractListener;
-import de.ImOlli.listeners.PlayerTabCompleteListener;
-import de.ImOlli.listeners.SignChangeListener;
+import de.ImOlli.listeners.*;
 import de.ImOlli.managers.MessageManager;
+import de.ImOlli.managers.PlayerManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.objects.WarpGui;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class MyWarp extends JavaPlugin {
 
@@ -21,6 +22,9 @@ public class MyWarp extends JavaPlugin {
     private static Boolean playSoundOnTeleport;
     private static Boolean playParticleOnTeleport;
     private static Boolean warpSigns;
+    private static Boolean cancelTeleportOnMove;
+    private static Integer cooldown;
+    private static Integer teleportDelay;
     private static ArrayList<String> warpnames;
 
     @Override
@@ -32,8 +36,43 @@ public class MyWarp extends JavaPlugin {
         MessageManager.init();
         MessageManager.loadConfig();
         WarpManager.init();
+        PlayerManager.init();
         registerCommands();
         registerListeners();
+        loadPlayers();
+
+    }
+
+    public static void reload() {
+
+        plugin.getLogger().log(Level.INFO, "Reloading MyWarp...");
+
+        prefix = null;
+        onlyOp = null;
+        playSoundOnTeleport = null;
+        playParticleOnTeleport = null;
+        warpSigns = null;
+        cancelTeleportOnMove = null;
+        cooldown = null;
+        teleportDelay = null;
+
+        plugin.reloadConfig();
+        checkConfig();
+        loadConfig();
+        MessageManager.init();
+        MessageManager.loadConfig();
+        WarpManager.init();
+        PlayerManager.init();
+        loadPlayers();
+
+    }
+
+    private static void loadPlayers() {
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            PlayerManager.registerPlayer(p);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -42,6 +81,18 @@ public class MyWarp extends JavaPlugin {
         playSoundOnTeleport = plugin.getConfig().getBoolean("PlaySoundOnTeleport");
         playParticleOnTeleport = plugin.getConfig().getBoolean("PlayParticleOnTeleport");
         warpSigns = plugin.getConfig().getBoolean("WarpSigns");
+        cancelTeleportOnMove = plugin.getConfig().getBoolean("CancelTeleportOnMove");
+        cooldown = plugin.getConfig().getInt("WarpCooldown");
+        teleportDelay = plugin.getConfig().getInt("TeleportDelay");
+
+        if (cooldown <= 0) {
+            cooldown = 0;
+        }
+
+        if (teleportDelay <= 0) {
+            teleportDelay = 0;
+            cancelTeleportOnMove = false;
+        }
 
         if (plugin.getConfig().contains("warpnames")) {
             warpnames = (ArrayList<String>) plugin.getConfig().getList("warpnames");
@@ -58,6 +109,9 @@ public class MyWarp extends JavaPlugin {
         plugin.getConfig().addDefault("PlaySoundOnTeleport", true);
         plugin.getConfig().addDefault("PlayParticleOnTeleport", true);
         plugin.getConfig().addDefault("WarpSigns", true);
+        plugin.getConfig().addDefault("CancelTeleportOnMove", false);
+        plugin.getConfig().addDefault("WarpCooldown", 5);
+        plugin.getConfig().addDefault("TeleportDelay", 0);
         plugin.saveConfig();
 
     }
@@ -79,6 +133,9 @@ public class MyWarp extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SignChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerTabCompleteListener(), this);
         Bukkit.getPluginManager().registerEvents(new WarpGui(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(), this);
 
     }
 
@@ -108,5 +165,25 @@ public class MyWarp extends JavaPlugin {
 
     public static Boolean getWarpSigns() {
         return warpSigns;
+    }
+
+    public static boolean isCooldownEnabled() {
+        return !(cooldown == 0);
+    }
+
+    public static Integer getCooldown() {
+        return cooldown;
+    }
+
+    public static boolean isDelayEnabled() {
+        return !(teleportDelay == 0);
+    }
+
+    public static Integer getTeleportDelay() {
+        return teleportDelay;
+    }
+
+    public static Boolean getCancelTeleportOnMove() {
+        return cancelTeleportOnMove;
     }
 }

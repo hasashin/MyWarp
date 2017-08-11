@@ -1,6 +1,7 @@
 package de.ImOlli.managers;
 
 import de.ImOlli.mywarp.MyWarp;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -44,6 +45,10 @@ public class MessageManager {
         config.addDefault("MyWarp.warp.exist", "&cThe warppoint &e%name% &calready exist!");
         config.addDefault("MyWarp.warp.create", "&7You successfully created the warppoint &e%name%&7.");
         config.addDefault("MyWarp.warp.remove", "&7You successfully removed the warppoint &e%name%&7.");
+        config.addDefault("MyWarp.warp.cooldown", "&7You must wait &e%time% seconds &7before you can warp again.");
+        config.addDefault("MyWarp.warp.beforedelayedwarping", "&7You will be warped in &e%time% seconds&7.");
+        config.addDefault("MyWarp.warp.currentlywarping", "&cYou are currently warping!");
+        config.addDefault("MyWarp.warp.movecancel", "&cYour warp was canceled because you moved!");
         config.addDefault("MyWarp.warp.sign.success", "&7You successfully created an warpsign §7to &e%name%&7.");
         config.addDefault("MyWarp.warp.sign.empty", "&cPlease write an warpname in the second line!");
         config.addDefault("MyWarp.warp.gui.title.warp", "&e&lWarpGUI &8| §5Teleport");
@@ -65,72 +70,14 @@ public class MessageManager {
 
     public static void loadConfig() {
 
-        String prefix = config.getString("MyWarp.prefix");
-        String console = config.getString("MyWarp.console.notplayer");
-        String reload = config.getString("MyWarp.reload");
-        String warp = config.getString("MyWarp.warp.msg");
-        String warps = config.getString("MyWarp.warps.msg");
-        String noperm = config.getString("MyWarp.noperm.msg");
-        String notexist = config.getString("MyWarp.warp.notexist");
-        String exist = config.getString("MyWarp.warp.exist");
-        String create = config.getString("MyWarp.warp.create");
-        String remove = config.getString("MyWarp.warp.remove");
-        String warpsignsuccess = config.getString("MyWarp.warp.sign.success");
-        String warpsignempty = config.getString("MyWarp.warp.sign.empty");
-        String guititlewarp = config.getString("MyWarp.warp.gui.title.warp");
-        String guititledelete = config.getString("MyWarp.warp.gui.title.delete");
-        String guinextpage = config.getString("MyWarp.warp.gui.nextpage");
-        String guipreviouspage = config.getString("MyWarp.warp.gui.previouspage");
-        String guinowarps = config.getString("MyWarp.warp.gui.nowarps");
-        String guilorewarp = config.getString("MyWarp.warp.gui.lore.warp");
-        String guiloredelete = config.getString("MyWarp.warp.gui.lore.delete");
-        String error = config.getString("MyWarp.error.msg");
-        String cmderror = config.getString("MyWarp.cmd.error");
+        for (String key : config.getKeys(true)) {
+            String value = config.getString(key);
+            value = ChatColor.translateAlternateColorCodes('&', value);
 
-        prefix = prefix.replaceAll("&", "§");
-        reload = reload.replaceAll("&", "§");
-        warp = warp.replaceAll("&", "§");
-        warps = warps.replaceAll("&", "§");
-        noperm = noperm.replaceAll("&", "§");
-        notexist = notexist.replaceAll("&", "§");
-        exist = exist.replaceAll("&", "§");
-        create = create.replaceAll("&", "§");
-        remove = remove.replaceAll("&", "§");
-        warpsignsuccess = warpsignsuccess.replaceAll("&", "§");
-        warpsignempty = warpsignempty.replaceAll("&", "§");
-        guititlewarp = guititlewarp.replaceAll("&", "§");
-        guititledelete = guititledelete.replaceAll("&", "§");
-        guinextpage = guinextpage.replaceAll("&", "§");
-        guipreviouspage = guipreviouspage.replaceAll("&", "§");
-        guinowarps = guinowarps.replaceAll("&", "§");
-        guilorewarp = guilorewarp.replaceAll("&", "§");
-        guiloredelete = guiloredelete.replaceAll("&", "§");
-        error = error.replaceAll("&", "§");
-        cmderror = cmderror.replaceAll("&", "§");
+            messages.put(key, value);
+        }
 
-        messages.put("MyWarp.prefix", prefix);
-        messages.put("MyWarp.console.notplayer", console);
-        messages.put("MyWarp.reload", reload);
-        messages.put("MyWarp.warp.msg", warp);
-        messages.put("MyWarp.warps.msg", warps);
-        messages.put("MyWarp.noperm.msg", noperm);
-        messages.put("MyWarp.warp.notexist", notexist);
-        messages.put("MyWarp.warp.exist", exist);
-        messages.put("MyWarp.warp.create", create);
-        messages.put("MyWarp.warp.remove", remove);
-        messages.put("MyWarp.warp.sign.success", warpsignsuccess);
-        messages.put("MyWarp.warp.sign.empty", warpsignempty);
-        messages.put("MyWarp.warp.gui.title.warp", guititlewarp);
-        messages.put("MyWarp.warp.gui.title.delete", guititledelete);
-        messages.put("MyWarp.warp.gui.nextpage", guinextpage);
-        messages.put("MyWarp.warp.gui.previouspage", guipreviouspage);
-        messages.put("MyWarp.warp.gui.nowarps", guinowarps);
-        messages.put("MyWarp.warp.gui.lore.warp", guilorewarp);
-        messages.put("MyWarp.warp.gui.lore.delete", guiloredelete);
-        messages.put("MyWarp.error.msg", error);
-        messages.put("MyWarp.cmd.error", cmderror);
-
-        MyWarp.setPrefix(prefix);
+        MyWarp.setPrefix(messages.getOrDefault("MyWarp.prefix", ""));
     }
 
     public static String getMessage(String name) {
