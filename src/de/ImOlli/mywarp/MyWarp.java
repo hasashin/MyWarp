@@ -155,7 +155,7 @@ public class MyWarp extends JavaPlugin {
 
         plugin.getConfig().options().copyDefaults(true);
         plugin.getConfig().options().header("Configuration of MyWarp \n\n" +
-                "Please note that editing the configurations while the server is running is not recommended.");
+                "Please note that editing the configurations while the server is running is not recommended.\n");
 
         plugin.getConfig().addDefault("OnlyOp", false);
         plugin.getConfig().addDefault("PlaySoundOnTeleport", true);

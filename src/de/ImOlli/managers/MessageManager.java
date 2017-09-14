@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class MessageManager {
 
@@ -24,7 +25,7 @@ public class MessageManager {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("[MyWarp] An error occurred while creating 'messages.yml'!");
+                MyWarp.getPlugin().getLogger().log(Level.SEVERE, "An error occurred while creating 'messages.yml'!");
                 return;
             }
         }
@@ -33,7 +34,7 @@ public class MessageManager {
 
         config.options().copyDefaults(true);
         config.options().header("Messages configuration of MyWarp \n\n" +
-                "Please note that editing the configurations while the server is running is not recommended.");
+                "Please note that editing the configurations while the server is running is not recommended.\n");
 
         config.addDefault("MyWarp.prefix", "&aMyWarp &8» ");
         config.addDefault("MyWarp.console.notplayer", "You are not an player!");

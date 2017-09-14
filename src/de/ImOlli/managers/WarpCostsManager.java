@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class WarpCostsManager {
 
@@ -47,7 +48,7 @@ public class WarpCostsManager {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("[MyWarp] An error occurred while creating 'warpcoins.yml'!");
+                MyWarp.getPlugin().getLogger().log(Level.SEVERE, "An error occurred while creating 'warpcoins.yml'!");
                 return;
             }
         }
@@ -56,7 +57,7 @@ public class WarpCostsManager {
 
         config.options().copyDefaults(true);
         config.options().header("WarpCoins Storage File of MyWarp \n\n" +
-                "Please note that editing the configurations while the server is running is not recommended.");
+                "Please note that editing the configurations while the server is running is not recommended.\n");
 
         config.addDefault("PlayerUUID", defaultValue);
 

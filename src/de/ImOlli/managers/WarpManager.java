@@ -1,5 +1,6 @@
 package de.ImOlli.managers;
 
+import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class WarpManager {
 
@@ -27,7 +29,7 @@ public class WarpManager {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("[MyWarp] An error occurred while creating 'warps.yml'!");
+                MyWarp.getPlugin().getLogger().log(Level.SEVERE, "An error occurred while creating 'warps.yml'!");
                 return;
             }
         }
@@ -36,7 +38,7 @@ public class WarpManager {
 
         config.options().copyDefaults(true);
         config.options().header("Warps of MyWarp \n\n" +
-                "Please note that you can only edit the config when the server is off.");
+                "Please note that editing the configurations while the server is running is not recommended.\n");
 
         try {
             config.save(file);
