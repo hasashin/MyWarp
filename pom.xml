@@ -6,7 +6,7 @@
 
     <groupId>de.ImOlli</groupId>
     <artifactId>MyWarp</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <build>
@@ -27,6 +27,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>natrolite-repo</id>
+            <url>https://repo.natrolite.org/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -34,7 +38,15 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Vault Plugin-->
+        <dependency>
+            <groupId>org.natrolite</groupId>
+            <artifactId>vault-api</artifactId>
+            <version>1.6.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
