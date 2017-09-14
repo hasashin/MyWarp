@@ -36,7 +36,20 @@ public class WarpCostsManager {
         defaultValue = MyWarp.getPlugin().getConfig().getDouble("WarpCosts.DefaultValue");
 
         if (MyWarp.isVaultEnabled()) {
-            currency = MyWarp.getEcon().currencyNamePlural();
+            try {
+                if (MyWarp.getEcon() != null) {
+                    if (MyWarp.getEcon().currencyNamePlural() != null) {
+                        currency = MyWarp.getEcon().currencyNamePlural();
+                    }
+                } else {
+                    currency = "";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                MyWarp.setVault(false);
+                MyWarp.getPlugin().getLogger().log(Level.SEVERE, "An error occurred while getting currency name. Disabled Vault support!");
+                currency = MessageManager.getMessage("MyWarp.warpcosts.currency");
+            }
         } else {
             currency = MessageManager.getMessage("MyWarp.warpcosts.currency");
         }

@@ -203,6 +203,10 @@ public class MyWarp extends JavaPlugin {
         prefix = newprefix;
     }
 
+    public static void setVault(boolean vault) {
+        MyWarp.vault = vault;
+    }
+
     public static String getPrefix() {
         return prefix;
     }
