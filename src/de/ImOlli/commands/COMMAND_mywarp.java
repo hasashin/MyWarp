@@ -11,33 +11,31 @@ public class COMMAND_mywarp implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-        if (!(cs instanceof Player)) {
-            cs.sendMessage(MessageManager.getMessage("MyWarp.console.notplayer"));
-            return true;
-        }
 
-        Player p = (Player) cs;
+        if (cs instanceof Player) {
+            Player p = (Player) cs;
 
-        if (MyWarp.isOnlyOp() && !p.isOp()) {
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));
-            return true;
-        }
+            if (MyWarp.isOnlyOp() && !p.isOp()) {
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));
+                return true;
+            }
 
-        if (!p.hasPermission("MyWarp.mywarp")) {
-            return false;
+            if (!p.hasPermission("MyWarp.mywarp")) {
+                return false;
+            }
         }
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 MyWarp.reload();
-                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.reload"));
+                cs.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.reload"));
                 return true;
             } else {
-                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/Mywarp [reload]"));
+                cs.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/Mywarp [reload]"));
                 return true;
             }
         } else {
-            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/Mywarp [reload]"));
+            cs.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.cmd.error").replaceAll("%cmd%", "/Mywarp [reload]"));
             return true;
         }
     }
