@@ -2,7 +2,7 @@ name: MyWarp
 author: ImOlli
 version: 1.6
 description: This Plugin give you the ability to create warppoints.
-main: MyWarp
+main: de.imolli.mywarp.MyWarp
 
 softdepend: [Vault]
 
