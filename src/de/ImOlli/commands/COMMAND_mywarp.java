@@ -25,7 +25,15 @@ public class COMMAND_mywarp implements CommandExecutor {
             }
         }
 
-        if (args.length == 1) {
+        if (args.length == 0) {
+
+            cs.sendMessage(" ");
+            cs.sendMessage("    §aMyWarp §ev" + MyWarp.getPlugin().getDescription().getVersion() + " §7by §e" + MyWarp.getPlugin().getDescription().getAuthors().get(0));
+            cs.sendMessage("    §7Description: §e" + MyWarp.getPlugin().getDescription().getDescription());
+            cs.sendMessage(" ");
+
+            return true;
+        } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 MyWarp.reload();
                 cs.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.reload"));
