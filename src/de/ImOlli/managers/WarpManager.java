@@ -1,12 +1,10 @@
 package de.ImOlli.managers;
 
-import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,20 +43,18 @@ public class WarpManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (MyWarp.getWarpnames() != null && !MyWarp.getWarpnames().isEmpty()) {
-            for (String name : MyWarp.getWarpnames()) {
 
-                String creator = config.getString(name.toLowerCase() + ".creator");
-                String warpname = config.getString(name.toLowerCase() + ".name");
-                String world = config.getString(name.toLowerCase() + ".world");
-                Double x = config.getDouble(name.toLowerCase() + ".x");
-                Double y = config.getDouble(name.toLowerCase() + ".y");
-                Double z = config.getDouble(name.toLowerCase() + ".z");
+        for (String name : config.getValues(false).keySet()) {
 
-                warps.put(name.toLowerCase(), new Warp(warpname, new Location(Bukkit.getWorld(world), x, y, z), creator));
-            }
+            String creator = config.getString(name.toLowerCase() + ".creator");
+            String warpname = config.getString(name.toLowerCase() + ".name");
+            String world = config.getString(name.toLowerCase() + ".world");
+            Double x = config.getDouble(name.toLowerCase() + ".x");
+            Double y = config.getDouble(name.toLowerCase() + ".y");
+            Double z = config.getDouble(name.toLowerCase() + ".z");
+
+            warps.put(name.toLowerCase(), new Warp(warpname, new Location(Bukkit.getWorld(world), x, y, z), creator));
         }
-
     }
 
     public static Boolean existWarp(String name) {
@@ -73,21 +69,6 @@ public class WarpManager {
             config.set(name.toLowerCase() + ".x", loc.getX());
             config.set(name.toLowerCase() + ".y", loc.getY());
             config.set(name.toLowerCase() + ".z", loc.getZ());
-
-            Plugin plugin = MyWarp.getPlugin(MyWarp.class);
-
-            if (plugin.getConfig().contains("warpnames")) {
-                @SuppressWarnings("unchecked")
-                ArrayList<String> list = (ArrayList<String>) plugin.getConfig().getList("warpnames");
-                list.add(name);
-                plugin.getConfig().set("warpnames", list);
-            } else {
-                ArrayList<String> list = new ArrayList<>();
-                list.add(name);
-                plugin.getConfig().set("warpnames", list);
-            }
-
-            plugin.saveConfig();
 
             try {
                 config.save(file);
@@ -104,19 +85,6 @@ public class WarpManager {
     public static Boolean removeWarp(String name) {
         if (existWarp(name.toLowerCase())) {
             config.set(name.toLowerCase(), null);
-
-            Plugin plugin = MyWarp.getPlugin(MyWarp.class);
-
-            if (plugin.getConfig().contains("warpnames")) {
-                @SuppressWarnings("unchecked")
-                ArrayList<String> list = (ArrayList<String>) plugin.getConfig().getList("warpnames");
-                list.remove(name);
-                plugin.getConfig().set("warpnames", list);
-            } else {
-                plugin.getConfig().set("warpnames", null);
-            }
-
-            plugin.saveConfig();
 
             try {
                 config.save(file);

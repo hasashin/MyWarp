@@ -1,6 +1,8 @@
 package de.ImOlli.commands;
 
 import de.ImOlli.managers.MessageManager;
+import de.ImOlli.managers.WarpCosts;
+import de.ImOlli.managers.WarpCostsManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.WarpGui;
 import org.bukkit.command.Command;
@@ -27,6 +29,15 @@ public class COMMAND_warpgui implements CommandExecutor {
 
         if (!p.hasPermission("MyWarp.warp.warp")) {
             return false;
+        }
+
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+            if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+                WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
+            } else {
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+                return true;
+            }
         }
 
         WarpGui.openWarpTeleportGui(p, 1);

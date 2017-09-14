@@ -4,6 +4,8 @@ version: 1.6
 description: This Plugin give you the ability to create warppoints.
 main: de.ImOlli.mywarp.MyWarp
 
+softdepend: [Vault]
+
 commands:
   warp:
     description: Warps you to an warppoint.
@@ -29,6 +31,10 @@ commands:
     description: Opens an Teleport WarpGUI.
     usage: /warpgui
     permission: MyWarp.warp.warp
+  warpcoins:
+    description: Shows you your amount of Warpcoins.
+    usage: /warpcoins <add|get|remove> <player> <amount>
+    permission: MyWarp.warpcoins.basic
 
 permissions:
   MyWarp.*:
@@ -39,6 +45,17 @@ permissions:
       MyWarp.warp.delete: true
       MyWarp.warps: true
       MyWarp.mywarp: true
+      MyWarp.warpcoins.basic: true
+      MyWarp.warpcoins.add: true
+      MyWarp.warpcoins.get: true
+      MyWarp.warpcoins.remove: true
+  MyWarp.warpcoins.*:
+    description: Gives you all permission for the command warpcoins.
+    children:
+      MyWarp.warpcoins.basic: true
+      MyWarp.warpcoins.add: true
+      MyWarp.warpcoins.get: true
+      MyWarp.warpcoins.remove: true
   MyWarp.warp.warp:
     description: Gives you the permission to warp to warppoints.
     default: true
@@ -53,4 +70,16 @@ permissions:
     default: true
   MyWarp.mywarp:
     description: Gives you the permission to reload MyWarp.
+    default: op
+  MyWarp.warpcoins.basic:
+    description: Gives you the permission to show you your amount of coins.
+    default: true
+  MyWarp.warpcoins.add:
+    description: Gives you the permission to add a player an amount of coins.
+    default: op
+  MyWarp.warpcoins.get:
+    description: Gives you the permission to show you the amount of coins of a player.
+    default: op
+  MyWarp.warpcoins.remove:
+    description: Gives you the permission to remove a palyer an amount of coins.
     default: op

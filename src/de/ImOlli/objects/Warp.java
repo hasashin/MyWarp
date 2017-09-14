@@ -1,6 +1,8 @@
 package de.ImOlli.objects;
 
 import de.ImOlli.managers.MessageManager;
+import de.ImOlli.managers.WarpCosts;
+import de.ImOlli.managers.WarpCostsManager;
 import de.ImOlli.mywarp.MyWarp;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,7 +38,12 @@ public class Warp {
             }
         }
 
-        p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", this.getName()));
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive()) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msgwithwarpcosts").replaceAll("%name%", this.getName()).replaceAll("%amount%", WarpCosts.WARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+
+        } else {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", this.getName()));
+        }
 
         if (MyWarp.getPlaySoundOnTeleport()) {
             p.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 20, 20);

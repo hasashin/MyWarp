@@ -1,6 +1,8 @@
 package de.ImOlli.commands;
 
 import de.ImOlli.managers.MessageManager;
+import de.ImOlli.managers.WarpCosts;
+import de.ImOlli.managers.WarpCostsManager;
 import de.ImOlli.managers.WarpManager;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
@@ -33,6 +35,15 @@ public class COMMAND_warps implements CommandExecutor {
             return false;
         }
 
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+            if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+                WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
+            } else {
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+                return true;
+            }
+        }
+
         TextComponent warps = new TextComponent("");
         for (Warp warp : WarpManager.getWarps().values()) {
 
@@ -56,6 +67,10 @@ public class COMMAND_warps implements CommandExecutor {
 
         TextComponent msg = new TextComponent(MyWarp.getPrefix() + "§7");
         msg.addExtra(warps);
+
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warps.msgwithwarpcosts").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+        }
 
         p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warps.msg").replace("%warps%", "" + WarpManager.getWarps().size()));
         p.spigot().sendMessage(msg);

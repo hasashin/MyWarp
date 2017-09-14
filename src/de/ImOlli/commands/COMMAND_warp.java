@@ -1,8 +1,6 @@
 package de.ImOlli.commands;
 
-import de.ImOlli.managers.MessageManager;
-import de.ImOlli.managers.PlayerManager;
-import de.ImOlli.managers.WarpManager;
+import de.ImOlli.managers.*;
 import de.ImOlli.mywarp.MyWarp;
 import de.ImOlli.objects.Warp;
 import de.ImOlli.objects.WarpDelay;
@@ -56,8 +54,25 @@ public class COMMAND_warp implements CommandExecutor {
                     return true;
 
                 } else {
+                    if (MyWarp.isWarpcostsEnabled()) {
+                        if (WarpCostsManager.hasEnougtFor(p, WarpCosts.WARP)) {
+                            WarpCostsManager.removeWarpCoins(p, WarpCosts.WARP.getCosts());
+                        } else {
+                            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.WARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+                            return true;
+                        }
+                    }
 
                     PlayerManager.addCooldown(p);
+                }
+            } else {
+                if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive()) {
+                    if (WarpCostsManager.hasEnougtFor(p, WarpCosts.WARP)) {
+                        WarpCostsManager.removeWarpCoins(p, WarpCosts.WARP.getCosts());
+                    } else {
+                        p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.WARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+                        return true;
+                    }
                 }
             }
 
@@ -73,6 +88,16 @@ public class COMMAND_warp implements CommandExecutor {
             }
             return true;
         } else {
+
+            if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+                if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+                    WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
+                } else {
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
+                    return true;
+                }
+            }
+
             WarpGui.openWarpTeleportGui(p, 1);
             return true;
         }
