@@ -40,7 +40,6 @@ public class COMMAND_setwarp implements CommandExecutor {
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 if (WarpCostsManager.hasEnougtFor(p, WarpCosts.CREATEWARP)) {
-                    System.out.println("ERERER");
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.CREATEWARP.getCosts());
                 } else {
                     p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.CREATEWARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
