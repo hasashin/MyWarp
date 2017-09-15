@@ -49,6 +49,8 @@ permissions:
       MyWarp.warpcoins.add: true
       MyWarp.warpcoins.get: true
       MyWarp.warpcoins.remove: true
+      MyWarp.warpcosts.ignore: true
+    default: not op
   MyWarp.warpcoins.*:
     description: Gives you all permission for the command warpcoins.
     children:
@@ -83,3 +85,6 @@ permissions:
   MyWarp.warpcoins.remove:
     description: Gives you the permission to remove a palyer an amount of coins.
     default: op
+  MyWarp.warpcosts.ignore:
+    description: Gives you the abillity to ignore all warpcosts.
+    default: not op

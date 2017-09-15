@@ -58,7 +58,7 @@ public class COMMAND_warp implements CommandExecutor {
                     return true;
 
                 } else {
-                    if (MyWarp.isWarpcostsEnabled()) {
+                    if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                         if (WarpCostsManager.hasEnougtFor(p, WarpCosts.WARP)) {
                             WarpCostsManager.removeWarpCoins(p, WarpCosts.WARP.getCosts());
                         } else {
@@ -70,7 +70,7 @@ public class COMMAND_warp implements CommandExecutor {
                     PlayerManager.addCooldown(p);
                 }
             } else {
-                if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive()) {
+                if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                     if (WarpCostsManager.hasEnougtFor(p, WarpCosts.WARP)) {
                         WarpCostsManager.removeWarpCoins(p, WarpCosts.WARP.getCosts());
                     } else {
@@ -93,7 +93,7 @@ public class COMMAND_warp implements CommandExecutor {
             return true;
         } else {
 
-            if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+            if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
                 } else {

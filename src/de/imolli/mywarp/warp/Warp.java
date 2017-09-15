@@ -38,9 +38,8 @@ public class Warp {
             }
         }
 
-        if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive()) {
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msgwithwarpcosts").replaceAll("%name%", this.getName()).replaceAll("%amount%", WarpCosts.WARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
-
         } else {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.msg").replaceAll("%name%", this.getName()));
         }

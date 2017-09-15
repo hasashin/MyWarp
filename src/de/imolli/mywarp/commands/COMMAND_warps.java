@@ -35,7 +35,7 @@ public class COMMAND_warps implements CommandExecutor {
             return false;
         }
 
-        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
             if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
                 WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
             } else {
@@ -68,7 +68,7 @@ public class COMMAND_warps implements CommandExecutor {
         TextComponent msg = new TextComponent(MyWarp.getPrefix() + "§7");
         msg.addExtra(warps);
 
-        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+        if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warps.msgwithwarpcosts").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
         }
 

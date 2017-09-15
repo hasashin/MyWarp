@@ -38,7 +38,7 @@ public class COMMAND_setwarp implements CommandExecutor {
                 return true;
             }
 
-            if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive()) {
+            if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 if (WarpCostsManager.hasEnougtFor(p, WarpCosts.CREATEWARP)) {
                     System.out.println("ERERER");
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.CREATEWARP.getCosts());
@@ -50,7 +50,7 @@ public class COMMAND_setwarp implements CommandExecutor {
 
             WarpManager.addWarp(warpname, p, p.getLocation());
 
-            if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive()) {
+            if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.createwithwarpcosts").replaceAll("%name%", warpname).replaceAll("%amount%", WarpCosts.CREATEWARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
             } else {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.create").replaceAll("%name%", warpname));

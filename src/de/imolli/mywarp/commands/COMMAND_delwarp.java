@@ -40,7 +40,7 @@ public class COMMAND_delwarp implements CommandExecutor {
                 return true;
             }
 
-            if (MyWarp.isWarpcostsEnabled() && WarpCosts.DELETEWARP.isActive()) {
+            if (MyWarp.isWarpcostsEnabled() && WarpCosts.DELETEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 if (WarpCostsManager.hasEnougtFor(p, WarpCosts.DELETEWARP)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.DELETEWARP.getCosts());
                 } else {
@@ -61,7 +61,7 @@ public class COMMAND_delwarp implements CommandExecutor {
             return true;
         } else {
 
-            if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
+            if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
                 } else {
