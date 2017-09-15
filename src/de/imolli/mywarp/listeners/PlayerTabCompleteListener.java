@@ -22,6 +22,14 @@ public class PlayerTabCompleteListener implements Listener {
             completions.add("reload");
             e.setCompletions(completions);
 
+        } else if (buffer.equalsIgnoreCase("/warpcoins ")) {
+
+            List<String> completions = new ArrayList<>();
+            completions.add("add");
+            completions.add("get");
+            completions.add("remove");
+            e.setCompletions(completions);
+
         } else if (buffer.equalsIgnoreCase("/warp ")) {
 
             List<String> completions = new ArrayList<>();
