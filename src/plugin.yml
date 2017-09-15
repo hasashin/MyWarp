@@ -53,6 +53,7 @@ permissions:
     default: not op
   MyWarp.warpcoins.*:
     description: Gives you all permission for the command warpcoins.
+    default: op
     children:
       MyWarp.warpcoins.basic: true
       MyWarp.warpcoins.add: true
