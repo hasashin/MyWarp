@@ -50,7 +50,7 @@ permissions:
       MyWarp.warpcoins.get: true
       MyWarp.warpcoins.remove: true
       MyWarp.warpcosts.ignore: true
-    default: not op
+    default: false
   MyWarp.warpcoins.*:
     description: Gives you all permission for the command warpcoins.
     default: op
@@ -88,4 +88,4 @@ permissions:
     default: op
   MyWarp.warpcosts.ignore:
     description: Gives you the abillity to ignore all warpcosts.
-    default: not op
+    default: false
