@@ -51,7 +51,7 @@ public class WarpGui implements Listener {
                 if (displayname.equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.nextpage"))) {
                     try {
 
-                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().replace("§7Page: §e", ""));
+                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
 
                         Integer size = WarpManager.getWarps().size();
                         Integer maxpages = size / 36;
@@ -76,7 +76,7 @@ public class WarpGui implements Listener {
                 if (displayname.equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.previouspage"))) {
                     try {
 
-                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().replace("§7Page: §e", ""));
+                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
 
                         if (currentpage == 1) {
                             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 20, 20);
@@ -115,7 +115,7 @@ public class WarpGui implements Listener {
                 if (displayname.equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.nextpage"))) {
                     try {
 
-                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().replace("§7Page: §e", ""));
+                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
 
                         Integer size = WarpManager.getWarps().size();
                         Integer maxpages = size / 36;
@@ -140,7 +140,7 @@ public class WarpGui implements Listener {
                 if (displayname.equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.previouspage"))) {
                     try {
 
-                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().replace("§7Page: §e", ""));
+                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
 
                         if (currentpage == 1) {
                             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 20, 20);
@@ -220,9 +220,16 @@ public class WarpGui implements Listener {
 
         inv.setItem(36, previousPage);
 
+        Integer size = WarpManager.getWarps().size();
+        Integer maxpages = size / 36;
+
+        if ((size - maxpages * 36) > 0) {
+            maxpages++;
+        }
+
         ItemStack pitem = new ItemStack(Material.PAPER);
         ItemMeta pitemMeta = pitem.getItemMeta();
-        pitemMeta.setDisplayName("§7Page: §e" + page);
+        pitemMeta.setDisplayName("§7Page: §e" + page + "§7/§e" + maxpages);
         pitem.setItemMeta(pitemMeta);
 
         inv.setItem(40, pitem);
@@ -300,9 +307,16 @@ public class WarpGui implements Listener {
 
         inv.setItem(36, previousPage);
 
+        Integer size = WarpManager.getWarps().size();
+        Integer maxpages = size / 36;
+
+        if ((size - maxpages * 36) > 0) {
+            maxpages++;
+        }
+
         ItemStack pitem = new ItemStack(Material.PAPER);
         ItemMeta pitemMeta = pitem.getItemMeta();
-        pitemMeta.setDisplayName("§7Page: §e" + page);
+        pitemMeta.setDisplayName("§7Page: §e" + page + "§7/§e" + maxpages);
         pitem.setItemMeta(pitemMeta);
 
         inv.setItem(40, pitem);
