@@ -9,12 +9,14 @@ import de.imolli.mywarp.warpcosts.WarpCostsManager;
 import de.imolli.mywarp.warpgui.COMMAND_warpgui;
 import de.imolli.mywarp.warpgui.WarpGui;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 public class MyWarp extends JavaPlugin {
@@ -57,6 +59,15 @@ public class MyWarp extends JavaPlugin {
         registerCommands();
         registerListeners();
         loadPlayers();
+
+        Metrics metrics = new Metrics(this);
+
+        metrics.addCustomChart(new Metrics.SimplePie("using_vault", new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return vault.toString();
+            }
+        }));
     }
 
     public static void reload() {
