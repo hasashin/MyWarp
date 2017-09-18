@@ -20,6 +20,11 @@ public class COMMAND_warpcoins implements CommandExecutor {
 
         Player p = (Player) cs;
 
+        if (MyWarp.isOnlyOp() && !p.isOp()) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));
+            return true;
+        }
+
         if (!p.hasPermission("MyWarp.warpcoins.basic")) {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));
             return true;
