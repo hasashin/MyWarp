@@ -68,6 +68,27 @@ public class MyWarp extends JavaPlugin {
                 return vault.toString();
             }
         }));
+
+        metrics.addCustomChart(new Metrics.SimplePie("only_op", new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return onlyOp.toString();
+            }
+        }));
+
+        metrics.addCustomChart(new Metrics.SimplePie("using_warpsigns", new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return warpSigns.toString();
+            }
+        }));
+
+        metrics.addCustomChart(new Metrics.SingleLineChart("average_warps", new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                return WarpManager.getWarps().size();
+            }
+        }));
     }
 
     public static void reload() {
