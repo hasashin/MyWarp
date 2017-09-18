@@ -1,4 +1,4 @@
-# MyWarp v1.7.1 [1.10 - 1.12]
+# MyWarp v1.7.2 [1.10 - 1.12]
 An simple warp plugin to create warppoints
 
 ![Warpsign](https://proxy.spigotmc.org/a5e1c11fb598ab1499e518976d52819a1126dcfa?url=http%3A%2F%2FIMOlli.de%2FMyWarp%2Fimage1.png)
