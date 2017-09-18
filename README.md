@@ -1,4 +1,4 @@
-# MyWarp v1.7 [1.10 - 1.12]
+# MyWarp v1.7.1 [1.10 - 1.12]
 An simple warp plugin to create warppoints
 
 **Important! If errors occur after updates: Try to delete the configs in the plugin folder.**
