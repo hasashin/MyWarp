@@ -45,6 +45,11 @@ public class WarpCostsManager {
                 } else {
                     currency = "";
                 }
+
+                if (currency.equalsIgnoreCase("") || currency.equalsIgnoreCase(" ")) {
+                    MyWarp.getPlugin().getLogger().log(Level.WARNING, "Currencyprefix is empty! Using default currencyprefix");
+                    currency = "Money";
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 MyWarp.setVault(false);

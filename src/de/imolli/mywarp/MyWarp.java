@@ -147,7 +147,7 @@ public class MyWarp extends JavaPlugin {
 
             PlayerManager.registerPlayer(p);
 
-            if (warpcosts && !WarpCostsManager.exists(p)) {
+            if (!vault && warpcosts && !WarpCostsManager.exists(p)) {
                 WarpCostsManager.createDefaultAccount(p);
             }
 
