@@ -70,7 +70,7 @@ public class COMMAND_delwarp implements CommandExecutor {
                 }
             }
 
-            WarpGui.openWarpDeleteGui(p, 1);
+            WarpGui.openWarpDeleteGui(p, 1, null);
             return true;
         }
     }

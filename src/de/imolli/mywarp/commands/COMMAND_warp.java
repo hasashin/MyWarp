@@ -102,7 +102,7 @@ public class COMMAND_warp implements CommandExecutor {
                 }
             }
 
-            WarpGui.openWarpTeleportGui(p, 1);
+            WarpGui.openWarpTeleportGui(p, 1, null);
             return true;
         }
     }
