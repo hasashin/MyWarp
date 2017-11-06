@@ -41,11 +41,17 @@
                     <artifactSet>
                         <includes>
                             <include>org.bstats:*</include>
+                            <include>net.wesjd:*</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
+                            <!-- Replace this with your package! -->
+                            <shadedPattern>de.imolli.mywarp</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.wesjd</pattern>
                             <!-- Replace this with your package! -->
                             <shadedPattern>de.imolli.mywarp</shadedPattern>
                         </relocation>
@@ -82,6 +88,13 @@
             <id>bstats-repo</id>
             <url>http://repo.bstats.org/content/repositories/releases/</url>
         </repository>
+
+        <!-- AnvilGUI API -->
+        <repository>
+            <id>wesjd-repo</id>
+            <url>https://nexus.wesjd.net/repository/thirdparty/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -122,6 +135,13 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>1.2</version>
+        </dependency>
+
+        <!-- AnvilGUI API -->
+        <dependency>
+            <groupId>net.wesjd</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
