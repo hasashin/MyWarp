@@ -19,11 +19,7 @@ public enum WarpCosts {
     public void init(FileConfiguration config) {
         costs = config.getDouble(configKey);
 
-        if (costs == 0.0) {
-            active = false;
-        } else {
-            active = true;
-        }
+        active = !(costs == 0.0);
     }
 
     public void setCosts(Double costs) {
