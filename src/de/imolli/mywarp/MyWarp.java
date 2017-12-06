@@ -168,7 +168,7 @@ public class MyWarp extends JavaPlugin {
         teleportDelay = plugin.getConfig().getInt("TeleportDelay");
         vault = plugin.getConfig().getBoolean("Vault");
         warpcosts = plugin.getConfig().getBoolean("WarpCosts.Enabled");
-        defaultLimit = plugin.getConfig().getInt("WarpLimit.default");
+        defaultLimit = plugin.getConfig().getInt("WarpLimit.Default");
         warplimit = plugin.getConfig().getBoolean("WarpLimit.Enabled");
 
         if (warpcosts) {
@@ -210,7 +210,7 @@ public class MyWarp extends JavaPlugin {
         plugin.getConfig().addDefault("WarpCosts.DeleteWarp", 50.0);
         plugin.getConfig().addDefault("WarpCosts.ListWarps", 5.0);
         plugin.getConfig().addDefault("WarpLimit.Enabled", false);
-        plugin.getConfig().addDefault("WarpLimit.default", 4);
+        plugin.getConfig().addDefault("WarpLimit.Default", 4);
         plugin.saveConfig();
 
     }
