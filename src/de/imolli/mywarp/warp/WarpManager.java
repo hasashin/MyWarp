@@ -118,4 +118,16 @@ public class WarpManager {
 
         return warplist;
     }
+
+    public static Integer getCurrentWarpCount(Player p) {
+        Integer warps = 0;
+
+        for (Warp warp : getWarpList()) {
+            if (warp.getCreator().equalsIgnoreCase(p.getName())) {
+                warps++;
+            }
+        }
+
+        return warps;
+    }
 }

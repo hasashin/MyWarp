@@ -60,32 +60,35 @@ permissions:
       MyWarp.warpcoins.get: true
       MyWarp.warpcoins.remove: true
   MyWarp.warp.warp:
-    description: Gives you the permission to warp to warppoints.
+    description: Give you the permission to warp to warppoints.
     default: true
   MyWarp.warp.create:
-    description: Gives you the permission to create warppoints.
+    description: Give you the permission to create warppoints.
     default: op
   MyWarp.warp.delete:
-    description: Gives you the permission to delete warppoints.
+    description: Give you the permission to delete warppoints.
     default: op
   MyWarp.warps:
-    description: Gives you the permission to show all list of all warppoints.
+    description: Give you the permission to show all list of all warppoints.
     default: true
   MyWarp.mywarp:
-    description: Gives you the permission to reload MyWarp.
+    description: Give you the permission to reload MyWarp.
     default: op
   MyWarp.warpcoins.basic:
-    description: Gives you the permission to show you your amount of coins.
+    description: Give you the permission to show you your amount of coins.
     default: true
   MyWarp.warpcoins.add:
-    description: Gives you the permission to add a player an amount of coins.
+    description: Give you the permission to add a player an amount of coins.
     default: op
   MyWarp.warpcoins.get:
-    description: Gives you the permission to show you the amount of coins of a player.
+    description: Give you the permission to show you the amount of coins of a player.
     default: op
   MyWarp.warpcoins.remove:
-    description: Gives you the permission to remove a palyer an amount of coins.
+    description: Give you the permission to remove a palyer an amount of coins.
     default: op
   MyWarp.warpcosts.ignore:
-    description: Gives you the abillity to ignore all warpcosts.
+    description: Give you the abillity to ignore all warpcosts.
     default: false
+  MyWarp.warp.limit.basic:
+    description: Give you the basic warplimit
+    default: true

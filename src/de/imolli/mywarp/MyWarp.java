@@ -30,8 +30,10 @@ public class MyWarp extends JavaPlugin {
     private static Boolean cancelTeleportOnMove;
     private static Boolean vault;
     private static Boolean warpcosts;
+    private static Boolean warplimit;
     private static Integer cooldown;
     private static Integer teleportDelay;
+    private static Integer defaultLimit;
 
     private static Economy econ = null;
 
@@ -105,6 +107,8 @@ public class MyWarp extends JavaPlugin {
         teleportDelay = null;
         vault = null;
         warpcosts = null;
+        defaultLimit = null;
+        warplimit = null;
 
         plugin.reloadConfig();
         checkConfig();
@@ -154,7 +158,6 @@ public class MyWarp extends JavaPlugin {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void loadConfig() {
         onlyOp = plugin.getConfig().getBoolean("OnlyOp");
         playSoundOnTeleport = plugin.getConfig().getBoolean("PlaySoundOnTeleport");
@@ -165,6 +168,8 @@ public class MyWarp extends JavaPlugin {
         teleportDelay = plugin.getConfig().getInt("TeleportDelay");
         vault = plugin.getConfig().getBoolean("Vault");
         warpcosts = plugin.getConfig().getBoolean("WarpCosts.Enabled");
+        defaultLimit = plugin.getConfig().getInt("WarpLimit.default");
+        warplimit = plugin.getConfig().getBoolean("WarpLimit.Enabled");
 
         if (warpcosts) {
             if (vault) {
@@ -204,6 +209,8 @@ public class MyWarp extends JavaPlugin {
         plugin.getConfig().addDefault("WarpCosts.CreateWarp", 100.0);
         plugin.getConfig().addDefault("WarpCosts.DeleteWarp", 50.0);
         plugin.getConfig().addDefault("WarpCosts.ListWarps", 5.0);
+        plugin.getConfig().addDefault("WarpLimit.Enabled", false);
+        plugin.getConfig().addDefault("WarpLimit.default", 4);
         plugin.saveConfig();
 
     }
@@ -294,5 +301,13 @@ public class MyWarp extends JavaPlugin {
 
     public static Plugin getPlugin() {
         return plugin;
+    }
+
+    public static Boolean isWarplimit() {
+        return warplimit;
+    }
+
+    public static Integer getDefaultLimit() {
+        return defaultLimit;
     }
 }

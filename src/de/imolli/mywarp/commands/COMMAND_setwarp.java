@@ -2,6 +2,7 @@ package de.imolli.mywarp.commands;
 
 import de.imolli.mywarp.MyWarp;
 import de.imolli.mywarp.managers.MessageManager;
+import de.imolli.mywarp.managers.PlayerManager;
 import de.imolli.mywarp.warp.WarpManager;
 import de.imolli.mywarp.warpcosts.WarpCosts;
 import de.imolli.mywarp.warpcosts.WarpCostsManager;
@@ -36,6 +37,14 @@ public class COMMAND_setwarp implements CommandExecutor {
             if (WarpManager.existWarp(warpname.toLowerCase())) {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.exist").replaceAll("%name%", warpname));
                 return true;
+            }
+
+            if (MyWarp.isWarplimit()) {
+                if (WarpManager.getCurrentWarpCount(p) >= PlayerManager.getWarpLimit(p)) {
+                    p.sendMessage(MessageManager.getMessage("MyWarp.warp.warplimit"));
+                    //TODO: Add Message to MessageManager
+                    return true;
+                }
             }
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
