@@ -31,6 +31,7 @@ public class MyWarp extends JavaPlugin {
     private static Boolean vault;
     private static Boolean warpcosts;
     private static Boolean warplimit;
+    private static Boolean GUISound;
     private static Integer cooldown;
     private static Integer teleportDelay;
     private static Integer defaultLimit;
@@ -109,6 +110,7 @@ public class MyWarp extends JavaPlugin {
         warpcosts = null;
         defaultLimit = null;
         warplimit = null;
+        GUISound = null;
 
         plugin.reloadConfig();
         checkConfig();
@@ -161,6 +163,7 @@ public class MyWarp extends JavaPlugin {
     public static void loadConfig() {
         onlyOp = plugin.getConfig().getBoolean("OnlyOp");
         playSoundOnTeleport = plugin.getConfig().getBoolean("PlaySoundOnTeleport");
+        GUISound = plugin.getConfig().getBoolean("PlayGUISounds");
         playParticleOnTeleport = plugin.getConfig().getBoolean("PlayParticleOnTeleport");
         warpSigns = plugin.getConfig().getBoolean("WarpSigns");
         cancelTeleportOnMove = plugin.getConfig().getBoolean("CancelTeleportOnMove");
@@ -197,6 +200,7 @@ public class MyWarp extends JavaPlugin {
 
         plugin.getConfig().addDefault("OnlyOp", false);
         plugin.getConfig().addDefault("PlaySoundOnTeleport", true);
+        plugin.getConfig().addDefault("PlayGUISounds", true);
         plugin.getConfig().addDefault("PlayParticleOnTeleport", true);
         plugin.getConfig().addDefault("WarpSigns", true);
         plugin.getConfig().addDefault("CancelTeleportOnMove", false);
@@ -309,5 +313,9 @@ public class MyWarp extends JavaPlugin {
 
     public static Integer getDefaultLimit() {
         return defaultLimit;
+    }
+
+    public static boolean isGUISoundEnabled() {
+        return GUISound;
     }
 }

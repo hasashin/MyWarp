@@ -110,7 +110,7 @@ public class PlayerManager {
             base = MyWarp.getDefaultLimit();
             limits.remove("basic");
 
-            if (limits.size() == 1) {
+            if (limits.size() == 0) {
                 return base;
             }
         }
