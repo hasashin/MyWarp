@@ -92,6 +92,8 @@ public class MyWarp extends JavaPlugin {
                 return WarpManager.getWarps().size();
             }
         }));
+
+        plugin.getLogger().log(Level.INFO, "MyWarp successfully loaded!");
     }
 
     public static void reload() {
