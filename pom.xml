@@ -79,8 +79,8 @@
 
         <!-- Vault API -->
         <repository>
-            <id>natrolite-repo</id>
-            <url>https://repo.natrolite.org/repository/maven-public/</url>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
 
         <!-- bStats API -->
@@ -124,9 +124,9 @@
 
         <!-- Vault Plugin-->
         <dependency>
-            <groupId>org.natrolite</groupId>
-            <artifactId>vault-api</artifactId>
-            <version>1.6.1</version>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.6</version>
             <scope>provided</scope>
         </dependency>
 
