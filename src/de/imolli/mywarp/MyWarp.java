@@ -4,10 +4,15 @@ import de.imolli.mywarp.commands.*;
 import de.imolli.mywarp.listeners.*;
 import de.imolli.mywarp.managers.MessageManager;
 import de.imolli.mywarp.managers.PlayerManager;
+import de.imolli.mywarp.utils.SQLHandle;
+import de.imolli.mywarp.warp.WarpHologramManager;
 import de.imolli.mywarp.warp.WarpManager;
+import de.imolli.mywarp.warp.gui.COMMAND_warpgui;
+import de.imolli.mywarp.warp.gui.RemoveHologramGUI;
+import de.imolli.mywarp.warp.gui.WarpFixGUI;
+import de.imolli.mywarp.warp.gui.WarpGui;
+import de.imolli.mywarp.warpcosts.WarpCosts;
 import de.imolli.mywarp.warpcosts.WarpCostsManager;
-import de.imolli.mywarp.warpgui.COMMAND_warpgui;
-import de.imolli.mywarp.warpgui.WarpGui;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -16,7 +21,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 public class MyWarp extends JavaPlugin {
@@ -35,6 +39,9 @@ public class MyWarp extends JavaPlugin {
     private static Integer cooldown;
     private static Integer teleportDelay;
     private static Integer defaultLimit;
+    private static Boolean updateCheck;
+    private static Boolean updateNotify;
+    private static Boolean deleteUnknownMessages;
 
     private static Economy econ = null;
 
@@ -56,49 +63,52 @@ public class MyWarp extends JavaPlugin {
 
         MessageManager.init();
         MessageManager.loadConfig();
+        SQLHandle.init();
         WarpManager.init();
         PlayerManager.init();
         WarpCostsManager.init();
+        WarpHologramManager.init();
         registerCommands();
         registerListeners();
         loadPlayers();
 
         Metrics metrics = new Metrics(this);
 
-        metrics.addCustomChart(new Metrics.SimplePie("using_vault", new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return vault.toString();
-            }
-        }));
+        metrics.addCustomChart(new Metrics.SimplePie("using_vault", () -> vault.toString()));
 
-        metrics.addCustomChart(new Metrics.SimplePie("only_op", new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return onlyOp.toString();
-            }
-        }));
+        metrics.addCustomChart(new Metrics.SimplePie("only_op", () -> onlyOp.toString()));
 
-        metrics.addCustomChart(new Metrics.SimplePie("using_warpsigns", new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return warpSigns.toString();
-            }
-        }));
+        metrics.addCustomChart(new Metrics.SimplePie("using_warpsigns", () -> warpSigns.toString()));
 
-        metrics.addCustomChart(new Metrics.SingleLineChart("average_warps", new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                return WarpManager.getWarps().size();
-            }
-        }));
+        metrics.addCustomChart(new Metrics.SingleLineChart("average_warps", () -> WarpManager.getWarps().size()));
 
         plugin.getLogger().log(Level.INFO, "MyWarp successfully loaded!");
+
+        UpdateChecker.init();
+        UpdateChecker.checkForUpdate();
+
+        for (Player all : Bukkit.getOnlinePlayers()) {
+            UpdateChecker.notifyPlayer(all);
+            WarpManager.notifyPlayer(all);
+        }
+    }
+
+    @Override
+    public void onDisable() {
+
+        //TODO: Improve Enable/Disable/Reload/Unload!
+
+        WarpHologramManager.disappearAll();
+        SQLHandle.disconnect();
+
+        plugin.getLogger().log(Level.INFO, "MyWarp successfully unloaded!");
     }
 
     public static void reload() {
 
         plugin.getLogger().log(Level.INFO, "Reloading MyWarp...");
+
+        WarpHologramManager.disappearAll();
 
         prefix = null;
         onlyOp = null;
@@ -113,6 +123,9 @@ public class MyWarp extends JavaPlugin {
         defaultLimit = null;
         warplimit = null;
         GUISound = null;
+        updateCheck = null;
+        updateNotify = null;
+        deleteUnknownMessages = null;
 
         plugin.reloadConfig();
         checkConfig();
@@ -123,16 +136,24 @@ public class MyWarp extends JavaPlugin {
                 plugin.getLogger().log(Level.SEVERE, "Disabled Vault support because no supported Vault plugin was found!");
                 vault = false;
             } else {
-                plugin.getLogger().log(Level.INFO, "Found Vault plugin, Enabled Vault support");
+                plugin.getLogger().log(Level.INFO, "Found Vault plugin, enabled Vault support");
             }
         }
 
         MessageManager.init();
         MessageManager.loadConfig();
+        SQLHandle.init();
         WarpManager.init();
         PlayerManager.init();
         WarpCostsManager.init();
+        WarpHologramManager.init();
         loadPlayers();
+
+
+        for (Player all : Bukkit.getOnlinePlayers()) {
+            UpdateChecker.notifyPlayer(all);
+            WarpManager.notifyPlayer(all);
+        }
 
     }
 
@@ -175,6 +196,9 @@ public class MyWarp extends JavaPlugin {
         warpcosts = plugin.getConfig().getBoolean("WarpCosts.Enabled");
         defaultLimit = plugin.getConfig().getInt("WarpLimit.Default");
         warplimit = plugin.getConfig().getBoolean("WarpLimit.Enabled");
+        updateCheck = plugin.getConfig().getBoolean("UpdateCheck");
+        updateNotify = plugin.getConfig().getBoolean("UpdateNotify");
+        deleteUnknownMessages = plugin.getConfig().getBoolean("DeleteUnknownMessages");
 
         if (warpcosts) {
             if (vault) {
@@ -201,6 +225,9 @@ public class MyWarp extends JavaPlugin {
                 "Please note that editing the configurations while the server is running is not recommended.\n");
 
         plugin.getConfig().addDefault("OnlyOp", false);
+        plugin.getConfig().addDefault("UpdateCheck", true);
+        plugin.getConfig().addDefault("UpdateNotify", true);
+        plugin.getConfig().addDefault("DeleteUnknownMessages", false);
         plugin.getConfig().addDefault("PlaySoundOnTeleport", true);
         plugin.getConfig().addDefault("PlayGUISounds", true);
         plugin.getConfig().addDefault("PlayParticleOnTeleport", true);
@@ -211,10 +238,12 @@ public class MyWarp extends JavaPlugin {
         plugin.getConfig().addDefault("Vault", false);
         plugin.getConfig().addDefault("WarpCosts.Enabled", false);
         plugin.getConfig().addDefault("WarpCosts.DefaultValue", 1000.0);
-        plugin.getConfig().addDefault("WarpCosts.Warp", 10.0);
-        plugin.getConfig().addDefault("WarpCosts.CreateWarp", 100.0);
-        plugin.getConfig().addDefault("WarpCosts.DeleteWarp", 50.0);
-        plugin.getConfig().addDefault("WarpCosts.ListWarps", 5.0);
+
+        //Create default values of warpcosts via the warpcosts enum
+        for (WarpCosts warpCosts : WarpCosts.values()) {
+            plugin.getConfig().addDefault(warpCosts.getConfigKey(), warpCosts.getDefaultValue());
+        }
+
         plugin.getConfig().addDefault("WarpLimit.Enabled", false);
         plugin.getConfig().addDefault("WarpLimit.Default", 4);
         plugin.saveConfig();
@@ -230,6 +259,9 @@ public class MyWarp extends JavaPlugin {
         Bukkit.getPluginCommand("mywarp").setExecutor(new COMMAND_mywarp());
         Bukkit.getPluginCommand("warpgui").setExecutor(new COMMAND_warpgui());
         Bukkit.getPluginCommand("warpcoins").setExecutor(new COMMAND_warpcoins());
+        Bukkit.getPluginCommand("setWarpHologram").setExecutor(new COMMAND_setwarphologram());
+        Bukkit.getPluginCommand("removeWarpHologram").setExecutor(new COMMAND_removewarphologram());
+        Bukkit.getPluginCommand("warprename").setExecutor(new COMMAND_warprename());
 
     }
 
@@ -242,6 +274,9 @@ public class MyWarp extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(), this);
+        Bukkit.getPluginManager().registerEvents(new WarpHologramManager(), this);
+        Bukkit.getPluginManager().registerEvents(new RemoveHologramGUI(), this);
+        Bukkit.getPluginManager().registerEvents(new WarpFixGUI(), this);
 
     }
 
@@ -319,5 +354,17 @@ public class MyWarp extends JavaPlugin {
 
     public static boolean isGUISoundEnabled() {
         return GUISound;
+    }
+
+    public static Boolean getUpdateCheck() {
+        return updateCheck;
+    }
+
+    public static Boolean getUpdateNotify() {
+        return updateNotify;
+    }
+
+    public static Boolean getDeleteUnknownMessages() {
+        return deleteUnknownMessages;
     }
 }

@@ -28,6 +28,7 @@ public class COMMAND_setwarp implements CommandExecutor {
         }
 
         if (!p.hasPermission("MyWarp.warp.create")) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("Warp.noperm.msg"));
             return false;
         }
 
@@ -41,14 +42,13 @@ public class COMMAND_setwarp implements CommandExecutor {
 
             if (MyWarp.isWarplimit()) {
                 if (WarpManager.getCurrentWarpCount(p) >= PlayerManager.getWarpLimit(p)) {
-                    p.sendMessage(MessageManager.getMessage("MyWarp.warp.warplimit"));
-                    //TODO: Add Message to MessageManager
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.warplimit").replaceAll("%name%", p.getName()).replaceAll("%limit%", PlayerManager.getWarpLimit(p).toString()));
                     return true;
                 }
             }
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-                if (WarpCostsManager.hasEnougtFor(p, WarpCosts.CREATEWARP)) {
+                if (WarpCostsManager.hasEnoughFor(p, WarpCosts.CREATEWARP)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.CREATEWARP.getCosts());
                 } else {
                     p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.CREATEWARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
@@ -56,7 +56,7 @@ public class COMMAND_setwarp implements CommandExecutor {
                 }
             }
 
-            WarpManager.addWarp(warpname, p, p.getLocation());
+            WarpManager.addWarp(warpname, p.getName(), p.getLocation(), null);
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.CREATEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.createwithwarpcosts").replaceAll("%name%", warpname).replaceAll("%amount%", WarpCosts.CREATEWARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));

@@ -1,4 +1,4 @@
-package de.imolli.mywarp.warpgui;
+package de.imolli.mywarp.warp.gui;
 
 import de.imolli.mywarp.MyWarp;
 import de.imolli.mywarp.managers.MessageManager;
@@ -31,7 +31,7 @@ public class COMMAND_warpgui implements CommandExecutor {
         }
 
         if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive()) {
-            if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+            if (WarpCostsManager.hasEnoughFor(p, WarpCosts.LISTWARPS)) {
                 WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
             } else {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));

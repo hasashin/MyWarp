@@ -98,7 +98,12 @@ public class WarpCostsManager {
         if (MyWarp.isVaultEnabled()) {
             MyWarp.getEcon().withdrawPlayer(p, value);
         } else {
-            setWarpCoins(p, getBalance(p) - value);
+
+            double ld = getBalance(p) - value;
+
+            if (ld < 0) ld = 0;
+
+            setWarpCoins(p, ld);
         }
     }
 
@@ -164,13 +169,22 @@ public class WarpCostsManager {
         }
     }
 
-    public static boolean hasEnougtFor(Player p, WarpCosts warpCosts) {
+    public static boolean hasEnoughFor(Player p, WarpCosts warpCosts) {
 
         Double balance = getBalance(p);
 
         if (balance == 0) return false;
 
         return !(balance < warpCosts.getCosts());
+    }
+
+    public static boolean hasEnoughFor(Player p, WarpCosts warpCosts, Integer multiplicator) {
+
+        Double balance = getBalance(p);
+
+        if (balance == 0) return false;
+
+        return !(balance < warpCosts.getCosts() * multiplicator);
     }
 
     public static String getCurrency() {

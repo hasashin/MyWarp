@@ -30,6 +30,11 @@ public class COMMAND_warpcoins implements CommandExecutor {
             return true;
         }
 
+        if (!MyWarp.isWarpcostsEnabled()) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcoins.onlyavailable"));
+            return true;
+        }
+
         if (MyWarp.isVaultEnabled()) {
             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcoins.onlyavailable"));
             return true;
@@ -46,7 +51,7 @@ public class COMMAND_warpcoins implements CommandExecutor {
         }
 
         if (args.length == 2) {
-            if (args[1].equalsIgnoreCase("get")) {
+            if (args[0].equalsIgnoreCase("get")) {
 
                 if (!p.hasPermission("MyWarp.warpcoins.get")) {
                     p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));

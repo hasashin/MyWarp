@@ -11,7 +11,7 @@ import org.bukkit.event.block.SignChangeEvent;
 public class SignChangeListener implements Listener {
 
     @EventHandler
-    public void onSignChange(SignChangeEvent e) {
+    public static void onSignChange(SignChangeEvent e) {
 
         Player p = e.getPlayer();
 

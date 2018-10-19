@@ -6,9 +6,10 @@ import de.imolli.mywarp.managers.PlayerManager;
 import de.imolli.mywarp.warp.Warp;
 import de.imolli.mywarp.warp.WarpDelay;
 import de.imolli.mywarp.warp.WarpManager;
+import de.imolli.mywarp.warp.gui.WarpGui;
+import de.imolli.mywarp.warp.warpflags.WarpFlag;
 import de.imolli.mywarp.warpcosts.WarpCosts;
 import de.imolli.mywarp.warpcosts.WarpCostsManager;
-import de.imolli.mywarp.warpgui.WarpGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,6 +32,7 @@ public class COMMAND_warp implements CommandExecutor {
         }
 
         if (!p.hasPermission("MyWarp.warp.warp")) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("Warp.noperm.msg"));
             return false;
         }
 
@@ -51,6 +53,20 @@ public class COMMAND_warp implements CommandExecutor {
                 }
             }
 
+            if (warp.getFlags().contains(WarpFlag.ONLYCREATORCANWARP)) {
+                if (!WarpManager.isCreator(warp, p)) {
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.notcreator"));
+                    return true;
+                }
+            }
+
+            if (warp.getFlags().contains(WarpFlag.ONLYPERMITTEDCANWARP)) {
+                if (!WarpManager.isPermittedToWarp(p)) {
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.notpermittedtowarp"));
+                    return true;
+                }
+            }
+
             if (MyWarp.isCooldownEnabled()) {
                 if (PlayerManager.getCooldown(p) > 0) {
 
@@ -58,8 +74,8 @@ public class COMMAND_warp implements CommandExecutor {
                     return true;
 
                 } else {
-                    if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-                        if (WarpCostsManager.hasEnougtFor(p, WarpCosts.WARP)) {
+                    if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore") && !warp.getFlags().contains(WarpFlag.NOCOSTS)) {
+                        if (WarpCostsManager.hasEnoughFor(p, WarpCosts.WARP)) {
                             WarpCostsManager.removeWarpCoins(p, WarpCosts.WARP.getCosts());
                         } else {
                             p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.WARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
@@ -70,8 +86,8 @@ public class COMMAND_warp implements CommandExecutor {
                     PlayerManager.addCooldown(p);
                 }
             } else {
-                if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-                    if (WarpCostsManager.hasEnougtFor(p, WarpCosts.WARP)) {
+                if (MyWarp.isWarpcostsEnabled() && WarpCosts.WARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore") && !warp.getFlags().contains(WarpFlag.NOCOSTS)) {
+                    if (WarpCostsManager.hasEnoughFor(p, WarpCosts.WARP)) {
                         WarpCostsManager.removeWarpCoins(p, WarpCosts.WARP.getCosts());
                     } else {
                         p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.WARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
@@ -94,7 +110,7 @@ public class COMMAND_warp implements CommandExecutor {
         } else {
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-                if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+                if (WarpCostsManager.hasEnoughFor(p, WarpCosts.LISTWARPS)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
                 } else {
                     p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));

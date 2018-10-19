@@ -32,11 +32,12 @@ public class COMMAND_warps implements CommandExecutor {
         }
 
         if (!p.hasPermission("MyWarp.warps")) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("Warp.noperm.msg"));
             return false;
         }
 
         if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-            if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+            if (WarpCostsManager.hasEnoughFor(p, WarpCosts.LISTWARPS)) {
                 WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
             } else {
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));

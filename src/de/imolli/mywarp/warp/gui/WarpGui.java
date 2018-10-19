@@ -1,10 +1,11 @@
-package de.imolli.mywarp.warpgui;
+package de.imolli.mywarp.warp.gui;
 
 import de.imolli.mywarp.MyWarp;
 import de.imolli.mywarp.managers.MessageManager;
 import de.imolli.mywarp.utils.SimpleLore;
 import de.imolli.mywarp.warp.Warp;
 import de.imolli.mywarp.warp.WarpManager;
+import de.imolli.mywarp.warp.warpflags.WarpFlag;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,23 +36,39 @@ public class WarpGui implements Listener {
         Player p = (Player) e.getWhoClicked();
 
         if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.menu"))) {
+
             e.setCancelled(true);
 
-            if (e.getCurrentItem().getType() == Material.EMPTY_MAP) {
-
-                String name = e.getCurrentItem().getItemMeta().getDisplayName().replace("§e", "");
+            if (e.getCurrentItem().getType() == Material.MAP) {
 
                 playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+                openOptionMenu(p, getWarpFromItem(e.getCurrentItem()));
+                return;
+            }
 
-                openOptionMenu(p, WarpManager.getWarp(name.toLowerCase()));
+            if (e.getCurrentItem().getType() == Material.GUNPOWDER) {
 
+                if (p.hasPermission("MyWarp.warp.showhiddenwarps")) {
+
+                    playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+                    openWarpInvisibleGui(p, 1);
+
+                    return;
+                } else {
+
+                    playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
+
+                    return;
+                }
             }
 
             if (e.getCurrentItem().getType() == Material.COMPASS) {
 
                 if (e.getClick().isLeftClick()) {
+
                     playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
                     openSearchGUI(p);
+
                 } else if (e.getClick().isRightClick()) {
 
                     Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
@@ -62,7 +79,7 @@ public class WarpGui implements Listener {
                 }
             }
 
-            if (e.getCurrentItem().getType() == Material.SKULL_ITEM) {
+            if (e.getCurrentItem().getType() == Material.PLAYER_HEAD) {
 
                 String displayname = e.getCurrentItem().getItemMeta().getDisplayName();
 
@@ -70,25 +87,23 @@ public class WarpGui implements Listener {
                     try {
 
                         String keyword = getKeyword(e.getClickedInventory());
-
                         Integer size;
 
                         if (keyword != null) {
                             size = getSearchedWarps(keyword).size();
                         } else {
-                            size = WarpManager.getWarps().size();
+                            size = WarpManager.getFilteredWarps().size();
                         }
 
                         Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
-
                         Integer maxpages = size / 36;
 
                         if ((size - maxpages * 36) > 0) {
                             maxpages++;
                         }
 
-                        if (currentpage.equals(maxpages)) {
-                            playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_PLING, 20, 20);
+                        if (currentpage.equals(maxpages) || currentpage > maxpages) {
+                            playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
                             return;
                         }
 
@@ -107,7 +122,7 @@ public class WarpGui implements Listener {
                         Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
 
                         if (currentpage == 1) {
-                            playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_PLING, 20, 20);
+                            playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
                             return;
                         }
 
@@ -130,9 +145,8 @@ public class WarpGui implements Listener {
                 return;
             }
 
-            if (e.getCurrentItem().getType() == Material.REDSTONE_COMPARATOR) {
+            if (e.getCurrentItem().getType() == Material.COMPARATOR) {
                 playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
-
                 openModifyMenu(p, getSelectedWarp(e.getClickedInventory()));
                 return;
             }
@@ -142,8 +156,10 @@ public class WarpGui implements Listener {
                 Warp warp = getSelectedWarp(e.getClickedInventory());
                 p.closeInventory();
 
-                p.performCommand("warp " + warp.getName());
-                return;
+                if (!checkWarpNullException(p, warp)) {
+                    p.performCommand("warp " + warp.getName());
+                    return;
+                }
             }
 
             if (e.getCurrentItem().getType() == Material.BARRIER) {
@@ -169,14 +185,21 @@ public class WarpGui implements Listener {
             }
 
             if (e.getCurrentItem().getType() == Material.SIGN) {
-                playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+                if (p.hasPermission("MyWarp.warp.modify.warpflags")) {
+                    playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+                    openWarpFlagsMenu(p, getSelectedWarp(e.getClickedInventory()));
+                } else {
+                    playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));
+                }
             }
+
         } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.rename"))) {
 
             e.setCancelled(true);
 
             if (e.getCurrentItem().getType() == Material.REDSTONE_BLOCK) {
-                playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BASS, 20, 20);
+                playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 20, 20);
                 openModifyMenu(p, getSelectedWarp(e.getClickedInventory()));
                 return;
             }
@@ -186,21 +209,18 @@ public class WarpGui implements Listener {
 
                 Warp warp = getSelectedWarp(e.getClickedInventory());
 
-                if (warp == null) {
-                    p.closeInventory();
-                    p.sendMessage("Error");
-                    return;
+                p.closeInventory();
+
+                if (!checkWarpNullException(p, warp)) {
+                    p.performCommand("warprename " + warp.getName() + " " + getRenamedName(e.getClickedInventory()));
                 }
-
-                p.performCommand("/warprename " + warp.getName() + " name " + getRenamedName(e.getClickedInventory()));
-
             }
         } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.delete"))) {
 
             e.setCancelled(true);
 
             if (e.getCurrentItem().getType() == Material.REDSTONE_BLOCK) {
-                playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BASS, 20, 20);
+                playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 20, 20);
                 openOptionMenu(p, getSelectedWarp(e.getClickedInventory()));
                 return;
             }
@@ -219,7 +239,173 @@ public class WarpGui implements Listener {
                 p.closeInventory();
                 p.performCommand("delwarp " + warp.getName());
             }
+        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.warpflags"))) {
+
+            e.setCancelled(true);
+
+            if (e.getCurrentItem().getType() == Material.MINECART) {
+                playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+                openModifyMenu(p, getSelectedWarpFromWarpFlagInv(e.getClickedInventory()));
+                return;
+            }
+
+            if (e.getCurrentItem().getType() == Material.SIGN) {
+
+                WarpFlag flag = getWarpFlagFromItem(e.getCurrentItem());
+                Warp warp = getSelectedWarpFromWarpFlagInv(e.getClickedInventory());
+
+                if (!p.hasPermission("MyWarp.warpflag." + flag.getName().toLowerCase())) {
+                    playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
+                    p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.noperm.msg"));
+                    return;
+                }
+
+                playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+
+                if (e.getCurrentItem().getEnchantments().isEmpty()) {
+
+                    warp.addFlag(flag);
+                    e.getCurrentItem().addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+
+                    ItemMeta meta = e.getCurrentItem().getItemMeta();
+                    meta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warpflags.warpflag.selected") + "\n§9" + flag.getName().toUpperCase()).getLore());
+                    e.getCurrentItem().setItemMeta(meta);
+                    ((Player) e.getWhoClicked()).updateInventory();
+
+                } else {
+
+                    warp.removeFlag(flag);
+                    e.getCurrentItem().removeEnchantment(Enchantment.ARROW_DAMAGE);
+
+                    ItemMeta meta = e.getCurrentItem().getItemMeta();
+                    meta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warpflags.warpflag.deselected") + "\n§9" + flag.getName().toUpperCase()).getLore());
+                    e.getCurrentItem().setItemMeta(meta);
+                    ((Player) e.getWhoClicked()).updateInventory();
+
+                }
+            }
+        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.invisible"))) {
+            e.setCancelled(true);
+
+            if (e.getCurrentItem().getType() == Material.MINECART) {
+
+                playGUISound(p, p.getLocation(), Sound.UI_BUTTON_CLICK, 20, 20);
+                openWarpGui(p, 1, null);
+                return;
+            }
+
+            if (e.getCurrentItem().getType() == Material.MAP) {
+
+                playGUISound(p, p.getLocation(), Sound.UI_BUTTON_CLICK, 20, 20);
+                openOptionMenu(p, getWarpFromItem(e.getCurrentItem()));
+                return;
+            }
+
+            if (e.getCurrentItem().getType() == Material.PLAYER_HEAD) {
+
+                String displayname = e.getCurrentItem().getItemMeta().getDisplayName();
+
+                if (displayname.equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.item.nextpage"))) {
+                    try {
+
+                        int size;
+
+                        ArrayList<Warp> warps = new ArrayList<>();
+
+                        for (Warp warp : WarpManager.getWarps().values()) {
+                            if (warp.getFlags().contains(WarpFlag.GUIINVISIBLE)) {
+                                warps.add(warp);
+                            }
+                        }
+
+                        size = warps.size();
+
+                        Integer currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
+                        Integer maxpages = size / 36;
+
+                        if ((size - maxpages * 36) > 0) {
+                            maxpages++;
+                        }
+
+                        if (currentpage.equals(maxpages) || currentpage > maxpages) {
+                            playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
+                            return;
+                        }
+
+                        openWarpInvisibleGui(p, currentpage + 1);
+                        p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.error.msg"));
+                    }
+                }
+
+                if (displayname.equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.item.previouspage"))) {
+                    try {
+
+                        int currentpage = Integer.parseInt(e.getClickedInventory().getItem(40).getItemMeta().getDisplayName().split("§7/")[0].replace("§7Page: §e", ""));
+
+                        if (currentpage == 1) {
+                            playGUISound(p, p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
+                            return;
+                        }
+
+                        openWarpInvisibleGui(p, currentpage + -1);
+                        playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.error.msg"));
+                    }
+                }
+
+            }
         }
+    }
+
+    private static void openWarpFlagsMenu(Player p, Warp warp) {
+
+        Inventory inv = Bukkit.createInventory(null, 9 * 4, MessageManager.getMessage("MyWarp.warp.gui.title.warpflags"));
+
+        for (WarpFlag flag : WarpFlag.values()) {
+
+            ItemStack itemFlag = new ItemStack(Material.SIGN);
+            if (warp.getFlags().contains(flag)) itemFlag.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+            ItemMeta itemFlagMeta = itemFlag.getItemMeta();
+            itemFlagMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            itemFlagMeta.setDisplayName("§7" + flag.getDisplayname());
+
+            if (p.hasPermission("MyWarp.warpflag." + flag.getName().toLowerCase())) {
+                if (warp.getFlags().contains(flag)) {
+                    itemFlagMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warpflags.warpflag.selected") + "\n§9" + flag.getName().toUpperCase()).getLore());
+                } else {
+                    itemFlagMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warpflags.warpflag.deselected") + "\n§9" + flag.getName().toUpperCase()).getLore());
+                }
+            } else {
+                itemFlagMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warpflags.noperm") + "\n§9" + flag.getName().toUpperCase()).getLore());
+            }
+
+            itemFlag.setItemMeta(itemFlagMeta);
+            inv.addItem(itemFlag);
+        }
+
+        ItemStack back = new ItemStack(Material.MINECART);
+        ItemMeta backMeta = back.getItemMeta();
+        backMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.back"));
+        back.setItemMeta(backMeta);
+
+        ItemStack info = new ItemStack(Material.PAPER);
+        ItemMeta infoMeta = info.getItemMeta();
+        infoMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.information"));
+        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warpflags.info").replaceAll("%name%", warp.getName()) + "\n§9" + warp.getName().toLowerCase()).getLore());
+        info.setItemMeta(infoMeta);
+
+        inv.setItem(27, back);
+        inv.setItem(31, info);
+
+        p.openInventory(inv);
+
     }
 
     private static void openModifyMenu(Player p, Warp warp) {
@@ -228,13 +414,13 @@ public class WarpGui implements Listener {
 
         Inventory inv = Bukkit.createInventory(null, 9 * 3, MessageManager.getMessage("MyWarp.warp.gui.title.modify"));
 
-        ItemStack info = new ItemStack(Material.EMPTY_MAP);
+        ItemStack info = new ItemStack(Material.MAP);
         ItemMeta infoMeta = info.getItemMeta();
         infoMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.information"));
 
         String location = ((int) warp.getLocation().getX()) + " " + ((int) warp.getLocation().getY()) + " " + ((int) warp.getLocation().getZ());
 
-        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.modify.info").replaceAll("%name%", warp.getName()).replaceAll("%creator%", warp.getCreator()).replaceAll("%location%", location) + "\n§9" + warp.getName()).getLore());
+        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.modify.info").replaceAll("%name%", warp.getName()).replaceAll("%creator%", warp.getCreator()).replaceAll("%location%", location) + "\n§9" + warp.getName().toLowerCase()).getLore());
         info.setItemMeta(infoMeta);
 
         ItemStack rename = new ItemStack(Material.NAME_TAG);
@@ -245,8 +431,22 @@ public class WarpGui implements Listener {
 
         ItemStack flags = new ItemStack(Material.SIGN);
         ItemMeta flagsMeta = flags.getItemMeta();
-        flagsMeta.setDisplayName("§aChange §eWarpFlags §e(Comming Soon!)");
-        flagsMeta.setLore(new SimpleLore(" \n§7Current WarpFlags: \n §e- \n ").getLore());
+        flagsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.warpflags"));
+
+        StringBuilder flagsMSG = new StringBuilder();
+        String loreMSG = MessageManager.getMessage("MyWarp.warp.gui.lore.modify.warpflags");
+
+        if (warp.getFlags().isEmpty()) {
+            flagsMSG.append("§e-");
+        } else {
+            for (WarpFlag flag : warp.getFlags()) {
+                flagsMSG.append("§e").append(flag.getDisplayname()).append("\n");
+            }
+        }
+
+        flagsMSG.append("\n");
+
+        flagsMeta.setLore(new SimpleLore(loreMSG.replaceAll("%flags%", flagsMSG.toString())).getLore());
         flags.setItemMeta(flagsMeta);
 
         ItemStack back = new ItemStack(Material.MINECART);
@@ -268,12 +468,12 @@ public class WarpGui implements Listener {
 
         Inventory inv = Bukkit.createInventory(null, 9 * 3, MessageManager.getMessage("MyWarp.warp.gui.title.selwarp"));
 
-        ItemStack info = new ItemStack(Material.EMPTY_MAP);
+        ItemStack info = new ItemStack(Material.MAP);
         ItemMeta infoMeta = info.getItemMeta();
         infoMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.information"));
         String location = ((int) warp.getLocation().getX()) + " " + ((int) warp.getLocation().getY()) + " " + ((int) warp.getLocation().getZ());
 
-        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.modify.info").replaceAll("%name%", warp.getName()).replaceAll("%creator%", warp.getCreator()).replaceAll("%location%", location) + "\n§9" + warp.getName()).getLore());
+        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.modify.info").replaceAll("%name%", warp.getName()).replaceAll("%creator%", warp.getCreator()).replaceAll("%location%", location) + "\n§9" + warp.getName().toLowerCase()).getLore());
         info.setItemMeta(infoMeta);
 
         ItemStack tp = new ItemStack(Material.ENDER_PEARL);
@@ -282,7 +482,7 @@ public class WarpGui implements Listener {
         tpM.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.option.teleport")).getLore());
         tp.setItemMeta(tpM);
 
-        ItemStack settings = new ItemStack(Material.REDSTONE_COMPARATOR);
+        ItemStack settings = new ItemStack(Material.COMPARATOR);
         ItemMeta settingsMeta = settings.getItemMeta();
         settingsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.modify"));
         settingsMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.option.modify")).getLore());
@@ -308,32 +508,37 @@ public class WarpGui implements Listener {
         p.openInventory(inv);
     }
 
-    public static void openWarpGui(Player p, Integer page, String keyword) {
+    private static void openWarpInvisibleGui(Player p, Integer page) {
 
-        Inventory inv = Bukkit.createInventory(null, 9 * 5, MessageManager.getMessage("MyWarp.warp.gui.title.menu"));
+        Inventory inv = Bukkit.createInventory(null, 9 * 5, MessageManager.getMessage("MyWarp.warp.gui.title.invisible"));
 
-        if (WarpManager.getWarps().isEmpty()) {
+        ArrayList<Warp> warps = new ArrayList<>();
 
-            ItemStack nowarps = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        for (Warp warp : WarpManager.getWarps().values()) {
+            if (warp.getFlags().contains(WarpFlag.GUIINVISIBLE)) {
+                warps.add(warp);
+            }
+        }
+
+        int warpAmount = warps.size();
+
+        if (warps.isEmpty()) {
+
+            ItemStack nowarps = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
             SkullMeta nowarpsMeta = (SkullMeta) nowarps.getItemMeta();
             nowarpsMeta.setOwner("MHF_Question");
-            nowarpsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.nowarps"));
+            nowarpsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.nowarps"));
             nowarps.setItemMeta(nowarpsMeta);
 
             inv.setItem(22, nowarps);
 
-            Bukkit.getScheduler().runTaskLater(MyWarp.getPlugin(MyWarp.class), () -> p.openInventory(inv), 2);
-            return;
-
         } else {
-
-            ArrayList<Warp> warps = getSearchedWarps(keyword);
 
             for (int i = 0; i < 36 * (page - 1) && warps.size() != 0; i++) {
                 warps.remove(0);
             }
 
-            Integer amount = 0;
+            int amount = 0;
 
             for (Warp warp : warps) {
 
@@ -343,10 +548,10 @@ public class WarpGui implements Listener {
                     break;
                 }
 
-                ItemStack item = new ItemStack(Material.EMPTY_MAP);
+                ItemStack item = new ItemStack(Material.MAP);
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName("§e" + warp.getName());
-                meta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warp").replace("%name%", warp.getCreator())).getLore());
+                meta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warp").replace("%name%", warp.getCreator()) + "\n\n§9" + warp.getName()).getLore());
                 item.setItemMeta(meta);
 
                 inv.addItem(item);
@@ -354,13 +559,103 @@ public class WarpGui implements Listener {
             }
         }
 
-        ItemStack previousPage = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack back = new ItemStack(Material.MINECART);
+        ItemMeta backMeta = back.getItemMeta();
+        backMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.back"));
+        back.setItemMeta(backMeta);
+
+        inv.setItem(36, back);
+
+        ItemStack previousPage = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
         SkullMeta previousPageMeta = (SkullMeta) previousPage.getItemMeta();
         previousPageMeta.setOwner("MHF_ArrowLeft");
         previousPageMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.previouspage"));
         previousPage.setItemMeta(previousPageMeta);
 
-        inv.setItem(36, previousPage);
+        inv.setItem(43, previousPage);
+
+        int maxpages = warpAmount / 36;
+
+        if ((warpAmount - maxpages * 36) > 0) {
+            maxpages++;
+        }
+
+        if (maxpages < 1) maxpages = 1;
+
+        ItemStack pitem = new ItemStack(Material.PAPER);
+        ItemMeta pitemMeta = pitem.getItemMeta();
+        //TODO: Add Message for prefix page!
+        pitemMeta.setDisplayName("§7Page: §e" + page + "§7/§e" + maxpages);
+        pitem.setItemMeta(pitemMeta);
+
+        inv.setItem(40, pitem);
+
+        ItemStack nextPage = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+        SkullMeta nextPageMeta = (SkullMeta) nextPage.getItemMeta();
+        nextPageMeta.setOwner("MHF_ArrowRight");
+        nextPageMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.nextpage"));
+        nextPage.setItemMeta(nextPageMeta);
+
+        inv.setItem(44, nextPage);
+
+        p.openInventory(inv);
+
+    }
+
+    public static void openWarpGui(Player p, Integer page, String keyword) {
+
+        //TODO: Load warps async
+
+        Inventory inv = Bukkit.createInventory(null, 9 * 5, MessageManager.getMessage("MyWarp.warp.gui.title.menu"));
+
+        if (WarpManager.getFilteredWarps().isEmpty()) {
+
+            ItemStack nowarps = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+            SkullMeta nowarpsMeta = (SkullMeta) nowarps.getItemMeta();
+            nowarpsMeta.setOwner("MHF_Question");
+            nowarpsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.nowarps"));
+            nowarps.setItemMeta(nowarpsMeta);
+
+            inv.setItem(22, nowarps);
+
+            Bukkit.getScheduler().runTaskLater(MyWarp.getPlugin(MyWarp.class), () -> p.openInventory(inv), 2);
+
+        } else {
+
+            ArrayList<Warp> warps = getSearchedWarps(keyword);
+
+            for (int i = 0; i < 36 * (page - 1) && warps.size() != 0; i++) {
+                warps.remove(0);
+            }
+
+            int amount = 0;
+
+            for (Warp warp : warps) {
+
+                amount++;
+
+                if (amount == 37) {
+                    break;
+                }
+
+                ItemStack item = new ItemStack(Material.MAP);
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName("§e" + warp.getName());
+                meta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.warp").replace("%name%", warp.getCreator()) + "\n\n§9" + warp.getName()).getLore());
+                item.setItemMeta(meta);
+
+                inv.addItem(item);
+
+            }
+        }
+
+        ItemStack previousPage = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
+        SkullMeta previousPageMeta = (SkullMeta) previousPage.getItemMeta();
+        previousPageMeta.setOwner("MHF_ArrowLeft");
+        previousPageMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.previouspage"));
+        previousPage.setItemMeta(previousPageMeta);
+
+        inv.setItem(43, previousPage);
 
         ItemStack search = new ItemStack(Material.COMPASS);
         if (keyword != null) search.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 2);
@@ -374,10 +669,10 @@ public class WarpGui implements Listener {
         searchMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.search")).getLore());
         search.setItemMeta(searchMeta);
 
-        inv.setItem(39, search);
+        inv.setItem(36, search);
 
-        Integer size = getSearchedWarps(keyword).size();
-        Integer maxpages = size / 36;
+        int size = getSearchedWarps(keyword).size();
+        int maxpages = size / 36;
 
         if ((size - maxpages * 36) > 0) {
             maxpages++;
@@ -387,12 +682,22 @@ public class WarpGui implements Listener {
 
         ItemStack pitem = new ItemStack(Material.PAPER);
         ItemMeta pitemMeta = pitem.getItemMeta();
+        //TODO: Add Message for prefix page!
         pitemMeta.setDisplayName("§7Page: §e" + page + "§7/§e" + maxpages);
         pitem.setItemMeta(pitemMeta);
 
         inv.setItem(40, pitem);
 
-        ItemStack nextPage = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        ItemStack invisibleWarps = new ItemStack(Material.GUNPOWDER);
+        ItemMeta invisibleWarpsMeta = invisibleWarps.getItemMeta();
+        invisibleWarpsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.invisiblewarps"));
+        invisibleWarps.setItemMeta(invisibleWarpsMeta);
+
+        if (p.hasPermission("MyWarp.warp.showhiddenwarps")) {
+            inv.setItem(39, invisibleWarps);
+        }
+
+        ItemStack nextPage = new ItemStack(Material.PLAYER_HEAD, 1, (short) 3);
         SkullMeta nextPageMeta = (SkullMeta) nextPage.getItemMeta();
         nextPageMeta.setOwner("MHF_ArrowRight");
         nextPageMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.nextpage"));
@@ -413,7 +718,7 @@ public class WarpGui implements Listener {
         ItemStack info = new ItemStack(Material.PAPER);
         ItemMeta infoMeta = info.getItemMeta();
         infoMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.information"));
-        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.rename.info").replaceAll("%name%", warp.getName()).replaceAll("%newname%", name) + "\n§9" + name + "\n§9" + warp.getName()).getLore());
+        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.rename.info").replaceAll("%name%", warp.getName()).replaceAll("%newname%", name) + "\n§9" + warp.getName().toLowerCase()).getLore());
         info.setItemMeta(infoMeta);
 
         ItemStack confirm = new ItemStack(Material.EMERALD_BLOCK);
@@ -445,7 +750,7 @@ public class WarpGui implements Listener {
         ItemStack info = new ItemStack(Material.PAPER);
         ItemMeta infoMeta = info.getItemMeta();
         infoMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.information"));
-        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.delete.info").replaceAll("%name%", warp.getName()) + "\n§9" + warp.getName()).getLore());
+        infoMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.delete.info").replaceAll("%name%", warp.getName()) + "\n§9" + warp.getName().toLowerCase()).getLore());
         info.setItemMeta(infoMeta);
 
         ItemStack confirm = new ItemStack(Material.EMERALD_BLOCK);
@@ -476,10 +781,7 @@ public class WarpGui implements Listener {
                 return MessageManager.getMessage("MyWarp.warp.gui.search.basic");
             }
 
-            Bukkit.broadcastMessage(reply);
-
             playGUISound(p, p.getLocation(), Sound.UI_BUTTON_CLICK, 20, 20);
-
             openWarpGui(p, 1, reply);
 
             return null;
@@ -495,10 +797,12 @@ public class WarpGui implements Listener {
                 return warp.getName();
             }
 
-            Bukkit.broadcastMessage(reply);
+            if (reply.contains(" ")) {
+                p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.nospaces"));
+                return warp.getName();
+            }
 
             playGUISound(p, p.getLocation(), Sound.UI_BUTTON_CLICK, 20, 20);
-
             openRenameConfirmGUI(p, warp, reply);
 
             return null;
@@ -509,7 +813,7 @@ public class WarpGui implements Listener {
     private static boolean checkWarpNullException(Player p, Warp warp) {
 
         if (warp == null) {
-            p.sendMessage(MessageManager.getMessage("MyWarp.error.warp"));
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.error.warp"));
             return true;
         } else {
             return false;
@@ -517,7 +821,7 @@ public class WarpGui implements Listener {
 
     }
 
-    private static void playGUISound(Player p, Location loc, Sound sound, Integer m1, Integer m2) {
+    public static void playGUISound(Player p, Location loc, Sound sound, Integer m1, Integer m2) {
 
         if (MyWarp.isGUISoundEnabled()) {
             p.playSound(loc, sound, m1, m2);
@@ -530,15 +834,12 @@ public class WarpGui implements Listener {
         ArrayList<Warp> allwarps = WarpManager.getWarpList();
         ArrayList<Warp> warps = new ArrayList<>();
 
-        if (keyword != null) {
-
-            for (Warp warp : allwarps) {
-                if (warp.getName().toLowerCase().contains(keyword.toLowerCase())) {
+        for (Warp warp : allwarps) {
+            if (!warp.getFlags().contains(WarpFlag.GUIINVISIBLE)) {
+                if (keyword == null || warp.getName().toLowerCase().contains(keyword.toLowerCase())) {
                     warps.add(warp);
                 }
             }
-        } else {
-            warps = allwarps;
         }
 
         return warps;
@@ -549,13 +850,37 @@ public class WarpGui implements Listener {
     }
 
     private static String getSelectedWarpName(Inventory inv) {
+        return getWarpNameFromItem(inv.getItem(4));
+    }
 
-        ItemStack item = inv.getItem(4);
+    private static Warp getSelectedWarpFromWarpFlagInv(Inventory inv) {
+
+        ItemStack item = inv.getItem(31);
+
+        String name = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1);
+        name = name.replace("§9", "");
+
+        return WarpManager.getWarp(name);
+    }
+
+    private static WarpFlag getWarpFlagFromItem(ItemStack item) {
+
+        String name = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1);
+        name = name.replace("§9", "");
+
+        return WarpFlag.valueOf(name);
+    }
+
+    private static String getWarpNameFromItem(ItemStack item) {
 
         String name = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1);
         name = name.replace("§9", "");
 
         return name;
+    }
+
+    private static Warp getWarpFromItem(ItemStack item) {
+        return WarpManager.getWarp(getWarpNameFromItem(item));
     }
 
     private static String getRenamedName(Inventory inv) {

@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PlayerMoveListener implements Listener {
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e) {
+    public static void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
 
         if ((((int) e.getFrom().getX()) == ((int) e.getTo().getX())) && (((int) e.getFrom().getZ()) == ((int) e.getTo().getZ()))) {
@@ -25,7 +25,7 @@ public class PlayerMoveListener implements Listener {
                 PlayerManager.getWarpDelay(p).cancel();
 
                 p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warp.movecancel"));
-                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 20, 20);
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20, 20);
 
                 PlayerManager.removeWarpDelay(p);
 

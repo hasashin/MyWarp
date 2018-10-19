@@ -3,6 +3,7 @@ package de.imolli.mywarp.managers;
 import de.imolli.mywarp.MyWarp;
 import de.imolli.mywarp.warp.Cooldown;
 import de.imolli.mywarp.warp.WarpDelay;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
@@ -31,7 +32,12 @@ public class PlayerManager {
         }
 
         if (!warplimits.containsKey(p)) {
-            setWarpLimit(p);
+            Bukkit.getScheduler().runTaskLater(MyWarp.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    setWarpLimit(p);
+                }
+            }, 20 * 1);
         }
     }
 
@@ -90,12 +96,9 @@ public class PlayerManager {
         for (PermissionAttachmentInfo pio : p.getEffectivePermissions()) {
             String perm = pio.getPermission();
 
-            if (perm.startsWith("mywarp.warp.limit.")) {
+            if (perm.toLowerCase().startsWith("mywarp.warp.limit.")) {
                 String ending = perm.substring(perm.lastIndexOf(".") + 1, perm.length());
                 limits.add(ending);
-
-                System.out.println(perm);
-                System.out.println(ending);
             }
         }
 
@@ -131,7 +134,6 @@ public class PlayerManager {
     public static void setWarpLimit(Player p) {
 
         Integer limit = getWarpLimitViaPermission(p);
-        System.out.println("Limit: " + limit);
 
         warplimits.put(p, limit);
     }

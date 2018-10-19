@@ -1,48 +1,77 @@
 name: MyWarp
 author: ImOlli
-version: 1.7.3
+version: 2.0
 description: This Plugin give you the ability to create warppoints.
 main: de.imolli.mywarp.MyWarp
+api-version: 1.13
 
 softdepend: [Vault]
 
 commands:
+
   warp:
     description: Warps you to an warppoint.
-    usage: /warp [Name]
+    usage: /warp [name]
     permission: MyWarp.warp.warp
+
   setwarp:
     description: Creates an new warppoint.
-    usage: /setwarp [Name]
+    usage: /setwarp [name]
     permission: MyWarp.warp.create
+
   delwarp:
     description: Removes an warppoint.
-    usage: /delwarp [Name]
+    usage: /delwarp [name]
     permission: MyWarp.warp.delete
+
   warps:
     description: Show you all available warppoints.
     usage: /warps
     permission: MyWarp.warps
+
   mywarp:
     description: Maincommand.
     usage: /mywarp <reload>
     permission: MyWarp.mywarp
+
   warpgui:
     description: Opens an Teleport WarpGUI.
     usage: /warpgui
     permission: MyWarp.warp.warp
+
   warpcoins:
     description: Shows you your amount of Warpcoins.
     usage: /warpcoins <add|get|remove> <player> <amount>
     permission: MyWarp.warpcoins.basic
 
+  setwarphologram:
+    description: Spawns a WarpHologram at your current location.
+    usage: /setwarphologram <name>
+    permission: MyWarp.warp.hologram.create
+
+  removewarphologram:
+    description: Removes a WarpHolograms near of you.
+    usage: /removewarphologram
+    permission: MyWarp.warp.hologram.remove
+
+  warprename:
+    description: Renames a warp point.
+    usage: /warprename
+    permission: MyWarp.warp.modify.rename
+
+#TODO: Update Permissions!
 permissions:
   MyWarp.*:
     description: Gives you all permissions.
+    default: false
     children:
       MyWarp.warp.warp: true
       MyWarp.warp.create: true
       MyWarp.warp.delete: true
+      MyWarp.warp.modify.rename: true
+      MyWarp.warp.modify.warpflags: true
+      MyWarp.warp.showhiddenwarps: true
+      MyWarp.warp.hologram.*: true
       MyWarp.warps: true
       MyWarp.mywarp: true
       MyWarp.warpcoins.basic: true
@@ -50,7 +79,10 @@ permissions:
       MyWarp.warpcoins.get: true
       MyWarp.warpcoins.remove: true
       MyWarp.warpcosts.ignore: true
-    default: false
+      MyWarp.warpcoins.*: true
+      MyWarp.warpflag.*: true
+      MyWarp.notify.update: true
+      MyWarp.notify.warpfix: true
   MyWarp.warpcoins.*:
     description: Gives you all permission for the command warpcoins.
     default: op
@@ -59,36 +91,119 @@ permissions:
       MyWarp.warpcoins.add: true
       MyWarp.warpcoins.get: true
       MyWarp.warpcoins.remove: true
+  MyWarp.warpflag.*:
+    description: Gives you all permission for the warpflags.
+    default: op
+    children:
+      MyWarp.warpflag.nocosts: true
+      MyWarp.warpflag.onlypermittedcanwarp: true
+      MyWarp.warpflag.onlypermittedcanwarp.use: true
+      MyWarp.warpflag.guiinvisible: true
+      MyWarp.warpflag.onlycreatorcanwarp: true
+  MyWarp.warp.hologram.*:
+    description: Gives you all permission for the WarpHolograms
+    default: op
+    children:
+      MyWarp.warp.hologram.create: true
+      MyWarp.warp.hologram.remove: true
+
+
   MyWarp.warp.warp:
     description: Give you the permission to warp to warppoints.
     default: true
+
   MyWarp.warp.create:
     description: Give you the permission to create warppoints.
     default: op
+
+  MyWarp.warp.modify.rename:
+    description: Give you the permission to rename warppoints.
+    default: op
+
+  MyWarp.warp.modify.warpflags:
+    description: Give you the permission to modify warpflags of warppoints.
+    default: true
+
+  MyWarp.warp.showhiddenwarps:
+    description: Give you the permission to see hidden warppoints.
+    default: op
+
   MyWarp.warp.delete:
     description: Give you the permission to delete warppoints.
     default: op
+
+  MyWarp.warp.hologram.create:
+    discription: Give you the permission to create warppoints.
+    default: op
+
+  MyWarp.warp.hologram.remove:
+    discription: Give you the permission to remove nearby warppoints.
+    default: op
+
+
+
+  MyWarp.warpflag.nocosts:
+    doscription: Give you the permission to change the warpflag 'NoCosts'.
+    default: op
+
+  MyWarp.warpflag.onlypermittedcanwarp:
+    doscription: Give you the permission to change the warpflag 'OnlyPermittedCanWarp'.
+    default: op
+
+  MyWarp.warpflag.onlypermittedcanwarp.use:
+    doscription: Give you the permission to use the warpflag 'OnlyPermittedCanWarp'.
+    default: op
+
+  MyWarp.warpflag.guiinvisible:
+    doscription: Give you the permission to change the warpflag 'GuiInvisible'.
+    default: op
+
+  MyWarp.warpflag.onlycreatorcanwarp:
+    doscription: Give you the permission to change the warpflag 'OnlyCreatorCanWarp'.
+    default: op
+
+
+
+  MyWarp.notify.update:
+    description: Notifies you every time you join for update if available.
+    default: op
+  MyWarp.notify.warpfix:
+    description: Notifies you every time you join for LoadErrors if available.
+    default: op
+
+
+
   MyWarp.warps:
     description: Give you the permission to show all list of all warppoints.
     default: true
+
   MyWarp.mywarp:
     description: Give you the permission to reload MyWarp.
     default: op
+
+
+
   MyWarp.warpcoins.basic:
     description: Give you the permission to show you your amount of coins.
     default: true
+
   MyWarp.warpcoins.add:
     description: Give you the permission to add a player an amount of coins.
     default: op
+
   MyWarp.warpcoins.get:
     description: Give you the permission to show you the amount of coins of a player.
     default: op
+
   MyWarp.warpcoins.remove:
     description: Give you the permission to remove a palyer an amount of coins.
     default: op
+
   MyWarp.warpcosts.ignore:
     description: Give you the abillity to ignore all warpcosts.
     default: false
+
+
   MyWarp.warp.limit.basic:
     description: Give you the basic warplimit
     default: true

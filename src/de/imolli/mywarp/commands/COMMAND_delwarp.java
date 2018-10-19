@@ -4,9 +4,9 @@ import de.imolli.mywarp.MyWarp;
 import de.imolli.mywarp.managers.MessageManager;
 import de.imolli.mywarp.warp.Warp;
 import de.imolli.mywarp.warp.WarpManager;
+import de.imolli.mywarp.warp.gui.WarpGui;
 import de.imolli.mywarp.warpcosts.WarpCosts;
 import de.imolli.mywarp.warpcosts.WarpCostsManager;
-import de.imolli.mywarp.warpgui.WarpGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,6 +29,7 @@ public class COMMAND_delwarp implements CommandExecutor {
         }
 
         if (!p.hasPermission("MyWarp.warp.delete")) {
+            p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("Warp.noperm.msg"));
             return false;
         }
 
@@ -41,7 +42,7 @@ public class COMMAND_delwarp implements CommandExecutor {
             }
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.DELETEWARP.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-                if (WarpCostsManager.hasEnougtFor(p, WarpCosts.DELETEWARP)) {
+                if (WarpCostsManager.hasEnoughFor(p, WarpCosts.DELETEWARP)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.DELETEWARP.getCosts());
                 } else {
                     p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.DELETEWARP.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
@@ -62,7 +63,7 @@ public class COMMAND_delwarp implements CommandExecutor {
         } else {
 
             if (MyWarp.isWarpcostsEnabled() && WarpCosts.LISTWARPS.isActive() && !p.hasPermission("MyWarp.warpcosts.ignore")) {
-                if (WarpCostsManager.hasEnougtFor(p, WarpCosts.LISTWARPS)) {
+                if (WarpCostsManager.hasEnoughFor(p, WarpCosts.LISTWARPS)) {
                     WarpCostsManager.removeWarpCoins(p, WarpCosts.LISTWARPS.getCosts());
                 } else {
                     p.sendMessage(MyWarp.getPrefix() + MessageManager.getMessage("MyWarp.warpcosts.notenough").replaceAll("%amount%", WarpCosts.LISTWARPS.getCosts().toString()).replaceAll("%currency%", WarpCostsManager.getCurrency()));
