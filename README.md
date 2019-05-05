@@ -1,4 +1,4 @@
-# MyWarp v1.7.3-modified [1.14]
+# MyWarp v1.7.4 [1.14]
 An simple warp plugin to create warppoints
 
 Modified for bukkit version 1.14 
