@@ -78,7 +78,7 @@ public class RemoveHologramGUI implements Listener {
 
         Player p = (Player) e.getWhoClicked();
 
-        if (e.getClickedInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.title.removeholograms"))) {
+        if (e.getView().getTitle().equalsIgnoreCase(MessageManager.getMessage("MyWarp.warp.gui.title.removeholograms"))) {
             e.setCancelled(true);
 
             if (e.getCurrentItem().getType() == Material.BARRIER) {

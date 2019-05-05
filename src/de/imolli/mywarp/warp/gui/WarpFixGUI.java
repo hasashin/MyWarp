@@ -31,7 +31,7 @@ public class WarpFixGUI implements Listener {
 
         Player p = (Player) e.getWhoClicked();
 
-        if (e.getClickedInventory().getTitle().equalsIgnoreCase(MessageManager.getMessage("MyWarp.warpfix.gui.title.warpfix.menu"))) {
+        if (e.getView().getTitle().equalsIgnoreCase(MessageManager.getMessage("MyWarp.warpfix.gui.title.warpfix.menu"))) {
             e.setCancelled(true);
 
             if (e.getCurrentItem().getType() == Material.PAPER) {
@@ -42,7 +42,7 @@ public class WarpFixGUI implements Listener {
             }
         }
 
-        if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warpfix.gui.title.warpfix.confirm"))) {
+        if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warpfix.gui.title.warpfix.confirm"))) {
             e.setCancelled(true);
 
             if (e.getCurrentItem().getType() == Material.EMERALD_BLOCK) { //Confirm
@@ -50,7 +50,7 @@ public class WarpFixGUI implements Listener {
                 WarpGui.playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
                 p.closeInventory();
 
-                String key = getKeyFromItem(e.getClickedInventory().getItem(4));
+                String key = getKeyFromItem(e.getView().getItem(4));
 
                 SQLHandle.update("DELETE FROM `warps` WHERE `name` = '" + key + "';");
                 WarpManager.removeFailedWarp(key);
