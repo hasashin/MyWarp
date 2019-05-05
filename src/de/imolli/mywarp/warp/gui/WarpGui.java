@@ -35,7 +35,7 @@ public class WarpGui implements Listener {
 
         Player p = (Player) e.getWhoClicked();
 
-        if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.menu"))) {
+        if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.menu"))) {
 
             e.setCancelled(true);
 
@@ -135,7 +135,7 @@ public class WarpGui implements Listener {
                     }
                 }
             }
-        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.selwarp"))) {
+        } else if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.selwarp"))) {
 
             e.setCancelled(true);
 
@@ -167,7 +167,7 @@ public class WarpGui implements Listener {
 
                 openDeleteConfirmGUI(p, getSelectedWarp(e.getClickedInventory()));
             }
-        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.modify"))) {
+        } else if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.modify"))) {
 
             e.setCancelled(true);
 
@@ -184,7 +184,7 @@ public class WarpGui implements Listener {
                 return;
             }
 
-            if (e.getCurrentItem().getType() == Material.SIGN) {
+            if (e.getCurrentItem().getType() == Material.OAK_SIGN) {
                 if (p.hasPermission("MyWarp.warp.modify.warpflags")) {
                     playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
                     openWarpFlagsMenu(p, getSelectedWarp(e.getClickedInventory()));
@@ -194,7 +194,7 @@ public class WarpGui implements Listener {
                 }
             }
 
-        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.rename"))) {
+        } else if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.rename"))) {
 
             e.setCancelled(true);
 
@@ -215,7 +215,7 @@ public class WarpGui implements Listener {
                     p.performCommand("warprename " + warp.getName() + " " + getRenamedName(e.getClickedInventory()));
                 }
             }
-        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.delete"))) {
+        } else if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.delete"))) {
 
             e.setCancelled(true);
 
@@ -239,7 +239,7 @@ public class WarpGui implements Listener {
                 p.closeInventory();
                 p.performCommand("delwarp " + warp.getName());
             }
-        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.warpflags"))) {
+        } else if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.warpflags"))) {
 
             e.setCancelled(true);
 
@@ -249,7 +249,7 @@ public class WarpGui implements Listener {
                 return;
             }
 
-            if (e.getCurrentItem().getType() == Material.SIGN) {
+            if (e.getCurrentItem().getType() == Material.OAK_SIGN) {
 
                 WarpFlag flag = getWarpFlagFromItem(e.getCurrentItem());
                 Warp warp = getSelectedWarpFromWarpFlagInv(e.getClickedInventory());
@@ -284,7 +284,7 @@ public class WarpGui implements Listener {
 
                 }
             }
-        } else if (e.getClickedInventory().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.invisible"))) {
+        } else if (e.getView().getTitle().startsWith(MessageManager.getMessage("MyWarp.warp.gui.title.invisible"))) {
             e.setCancelled(true);
 
             if (e.getCurrentItem().getType() == Material.MINECART) {
@@ -370,7 +370,7 @@ public class WarpGui implements Listener {
 
         for (WarpFlag flag : WarpFlag.values()) {
 
-            ItemStack itemFlag = new ItemStack(Material.SIGN);
+            ItemStack itemFlag = new ItemStack(Material.OAK_SIGN);
             if (warp.getFlags().contains(flag)) itemFlag.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
             ItemMeta itemFlagMeta = itemFlag.getItemMeta();
             itemFlagMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -429,7 +429,7 @@ public class WarpGui implements Listener {
         renameMeta.setLore(new SimpleLore(MessageManager.getMessage("MyWarp.warp.gui.lore.modify.rename").replaceAll("%name%", warp.getName())).getLore());
         rename.setItemMeta(renameMeta);
 
-        ItemStack flags = new ItemStack(Material.SIGN);
+        ItemStack flags = new ItemStack(Material.OAK_SIGN);
         ItemMeta flagsMeta = flags.getItemMeta();
         flagsMeta.setDisplayName(MessageManager.getMessage("MyWarp.warp.gui.item.warpflags"));
 

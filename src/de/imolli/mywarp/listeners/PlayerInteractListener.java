@@ -16,7 +16,7 @@ public class PlayerInteractListener implements Listener {
         Player p = e.getPlayer();
         if (MyWarp.getWarpSigns()) {
             if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.SIGN) {
+                if (e.getClickedBlock().getType() == Material.OAK_WALL_SIGN || e.getClickedBlock().getType() == Material.OAK_SIGN) {
 
                     Sign sign = (Sign) e.getClickedBlock().getState();
 

@@ -50,7 +50,7 @@ public class WarpFixGUI implements Listener {
                 WarpGui.playGUISound(p, p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 20, 20);
                 p.closeInventory();
 
-                String key = getKeyFromItem(e.getView().getItem(4));
+                String key = getKeyFromItem(e.getClickedInventory().getItem(4));
 
                 SQLHandle.update("DELETE FROM `warps` WHERE `name` = '" + key + "';");
                 WarpManager.removeFailedWarp(key);
