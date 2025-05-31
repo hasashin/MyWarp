@@ -1,3 +1,9 @@
+>[!NOTE]
+>This plugin was originally created by [InOlli](https://github.com/ImOlli).
+>I made some modifications for Minecraft 1.14 for Bukkit server.
+>
+>This plugin is no longer maintained
+
 # MyWarp v1.7.4 [1.14]
 An simple warp plugin to create warppoints
 
